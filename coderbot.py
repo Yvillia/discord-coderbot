@@ -11,7 +11,7 @@ def check_multiples(msg):
   i = 0
   while i < len(msg) and msg[i].isdigit():
     i += 1
-  if i == 0: return 0
+  if i == 0: return -1
   else:
     number_of_dice = int(msg[0:i][::-1])
     return number_of_dice
@@ -38,7 +38,7 @@ async def on_message(message):
     if str(message.author) == "Mat#5553" and np.random.randint(1, 7) == 6:
       await message.add_reaction("<:thinkban:776586606358167602>")
 
-    if str(message.author) == "PokeProfRob#2670":
+    if str(message.author) == "PokeProfRob#2670" and np.random.randint(1, 7) == 6:
       await message.add_reaction("<:mat:792252631765483520>")
 
     if 'coin' in message.content.lower().strip() and 'flip' in message.content.lower().strip():
@@ -51,22 +51,32 @@ async def on_message(message):
       msg = message.content.lower().split('d', 1)
       start = msg[1]
       die_count = check_multiples(msg[0])
-      if die_count == 0: return
+      if die_count == -1: die_count = 1
       faces = ''
       for i in start:
         if (i.isdigit()):
           faces += i
       faces = int(faces)
-      if faces <= 0:
-        await message.channel.send("Try Something Else Dummy")
+      if faces <= 0 or die_count > 100:
+        await message.channel.send("Try Something Else Plz Dummy!")
       else:
         results = [np.random.randint(1, high=(faces+1)) for _ in range(die_count)]
         if len(results) > 1:
           output = "Total Roll: " + str(die_count) + "d" + str(sum(results))
           for i, result in enumerate(results):
             output += "\nRoll " + str(i + 1) + ": 1d" + str(result)
+            if result == 1 or result == faces:
+              await message.add_reaction("<:thinkban:776586606358167602>")
+
         else:
-          output = str(die_count) + "d" + str(np.random.randint(1, high=(faces+1)))
+          output = str(die_count) + "d" + str(results[0])
+        if die_count == sum(results) or die_count * faces == sum(results):
+          await message.add_reaction("<:thinkban:776586606358167602>")
+        
+        # await message.channel.send(die_count)
+        # await message.channel.send(faces)
+        # await message.channel.send(results)
+
         await message.channel.send(output)
 
     if message.content.lower().startswith('poll:'):
