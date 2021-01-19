@@ -1,0 +1,21 @@
+{
+  "name": "Discord CoderBot",
+  "description": "Bot for EpicCoderz Discord Channel",
+  "image": "heroku/python",
+  "repository": "https://github.com/nnrogers515/discord-coderbot",
+  "keywords": ["python" ],
+  "addons": [ "heroku-postgresql" ],
+  "env": {
+    "TOKEN": {
+      "description": "The secret key for the Django application.",
+      "generator": "secret"
+    }
+  },
+  "environments": {
+    "test": {
+      "scripts": {
+        "run": "python coderbot.py"
+      }
+    }
+  }
+}

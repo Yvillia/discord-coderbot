@@ -5,7 +5,7 @@ jobs:
     name: Bot Deployment
     steps:
       - name: Standard Deployment
-        run: ./main.py
+        run: ./coderbot.py
         env: 
           TOKEN: ${{ secrets.TOKEN }}
     
