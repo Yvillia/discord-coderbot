@@ -1,0 +1,11 @@
+on: push
+
+jobs:
+  my-job:
+    name: Bot Deployment
+    steps:
+      - name: Standard Deployment
+        run: ./main.py
+        env: 
+          TOKEN: ${{ secrets.TOKEN }}
+    
