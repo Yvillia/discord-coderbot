@@ -141,6 +141,7 @@ async def dialogue_handler(myBot, message):
       await message.channel.send("Thank youwo vewwy muwuch! I will continuwue towo dowo my best OwO!")
       with open('statistics.json', 'r') as stats:
         data = json.load(stats)
+        stats.close()
       with open('statistics.json', 'w') as stats:
         data['Phrases']['Good Bot'] += 1
         json.dump(data, stats)
