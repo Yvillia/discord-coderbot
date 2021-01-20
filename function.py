@@ -1,5 +1,6 @@
 import sys
 import numpy as np
+import json
 
 def check_multiples(msg):
   '''
@@ -124,13 +125,28 @@ async def dialogue_handler(myBot, message):
   returns 1 on proper execution
   '''
   try:
-
+    # Bad Bot and Good Bot Messages With Live Updates to Statistics.json
     if "bad bot" in message.content.lower():
       await message.channel.send("I am so sowwry! I prowomise towo dowo better UwU!")
+      # Statistics JSON File
+      with open('statistics.json', 'r') as stats:
+        data = json.load(stats)
+        stats.close()
+      with open('statistics.json', 'w') as stats:
+        data['Phrases']['Bad Bot'] += 1
+        json.dump(data, stats)
+        stats.close()
     
     elif "good bot" in message.content.lower():
       await message.channel.send("Thank youwo vewwy muwuch! I will continuwue towo dowo my best OwO!")
-    
+      with open('statistics.json', 'r') as stats:
+        data = json.load(stats)
+      with open('statistics.json', 'w') as stats:
+        data['Phrases']['Good Bot'] += 1
+        json.dump(data, stats)
+        stats.close()
+
+    # Checks Mentions for Individual/Group Messages
     if len(message.mentions) > 0:
       for name in message.mentions:
         if '!pogchamp' not in message.content.lower() and extract_names(message.author)[0].lower() == extract_names(name)[0].lower():
@@ -157,17 +173,18 @@ async def dialogue_handler(myBot, message):
               editedStr += "and " + str(extract_names(user)[0])
           output = "```System.out.println(\"Sigh... Okay, I guess you can be my little Pogchamps. {0}, Come here\")```".format(editedStr)
 
+        # Output String is Built in the Conditionals Above and Sent
         await message.channel.send(output)
+
   except Exception as inst:
     exc_type, exc_obj, exc_tb = sys.exc_info()
     errorMsg = "Error " + str(type(inst)) + ": \n" + str(inst) + "\nLine: " + str(exc_tb.tb_lineno)
     await message.channel.send("```" + errorMsg + "```")
     return 0
+
   return 1
 
 async def reaction_handler(myBot, message):
-
-
   '''
   Similar to dialogue_handler, adds reaction emotes to certain messages
 
@@ -177,6 +194,7 @@ async def reaction_handler(myBot, message):
 
   returns 1 for correct 
   '''
+
   try:
     if str(message.author) == "Mat#5553" and np.random.randint(1, 21) == 1:
       await message.add_reaction("<:thinkban:776586606358167602>")
