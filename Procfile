@@ -1,1 +1,1 @@
-worker: python coderbot.py function.py
+web: python coderbot.py function.py
