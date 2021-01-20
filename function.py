@@ -119,28 +119,29 @@ async def dialogue_handler(client, message):
   returns 1 on proper execution
   '''
   try:
-    if 'code' in message.content.lower():
-      msg = "```System.out.println(\"Sigh... Okay, I guess you can be my little Pogchamp. {0}, Come here\")```"
-      await message.channel.send(msg.format(extract_names(message.author)[0]))
+    if len(message.mentions) > 0:
+      for name in message.mentions:
+        if "coderbot" == extract_names(name).lower():
+          msg = "```System.out.println(\"Sigh... Okay, I guess you can be my little Pogchamp. {0}, Come here\")```"
+          await message.channel.send(msg.format(extract_names(message.author)[0]))
 
-    if 'pogchamp' in message.content.lower() and len(message.mentions) > 0:
-      if len(message.mentions) == 1:
-        output = "```System.out.println(\"Sigh... Okay, I guess you can be my little Pogchamp. {0}, Come here\")```".format(extract_names(message.mentions[0])[0])
-      else:
-        editedStr = ''
-        for i, user in enumerate(message.mentions):
-          if i != (len(message.mentions) - 1):
-            editedStr += str(extract_names(user)[0]) + ", "
-          else:
-            editedStr += "and " + str(extract_names(user)[0])
-        output = "```System.out.println(\"Sigh... Okay, I guess you can be my little Pogchamps. {0}, Come here\")```".format(editedStr)
-      await message.channel.send(output)
+      if 'pogchamp' in message.content.lower():
+        if len(message.mentions) == 1:
+          output = "```System.out.println(\"Sigh... Okay, I guess you can be my little Pogchamp. {0}, Come here\")```".format(extract_names(message.mentions[0])[0])
+        else:
+          editedStr = ''
+          for i, user in enumerate(message.mentions):
+            if i != (len(message.mentions) - 1):
+              editedStr += str(extract_names(user)[0]) + ", "
+            else:
+              editedStr += "and " + str(extract_names(user)[0])
+          output = "```System.out.println(\"Sigh... Okay, I guess you can be my little Pogchamps. {0}, Come here\")```".format(editedStr)
+        await message.channel.send(output)
   except Exception as inst:
     exc_type, exc_obj, exc_tb = sys.exc_info()
     errorMsg = "Error " + str(type(inst)) + ": \n" + str(inst) + "\nLine: " + str(exc_tb.tb_lineno)
     await message.channel.send("```" + errorMsg + "```")
     return 0
-  
   return 1
 
 async def reaction_handler(client, message):
@@ -157,10 +158,10 @@ async def reaction_handler(client, message):
     if "shit" in message.content.lower():
       await message.add_reaction(":poop:")
 
-    if str(message.author) == "Mat#5553" and np.random.randint(1, 7) == 6:
+    if str(message.author) == "Mat#5553" and np.random.randint(1, 21) == 1:
       await message.add_reaction("<:thinkban:776586606358167602>")
 
-    if str(message.author) == "PokeProfRob#2670" and np.random.randint(1, 7) == 6:
+    if str(message.author) == "PokeProfRob#2670" and np.random.randint(1, 21) == 1:
       await message.add_reaction("<:mat:792252631765483520>")
 
     if message.content.lower().startswith('poll:'):
