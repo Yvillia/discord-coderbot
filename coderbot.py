@@ -1,7 +1,7 @@
 import discord
 import os
 import sys
-from functions import dialogue_handler, reaction_handler, roll_dice, coin_flip
+from function import dialogue_handler, reaction_handler, roll_dice, coin_flip
 
 client = discord.Client()
 # guildName = "Epic Coders"
