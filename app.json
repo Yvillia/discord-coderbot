@@ -14,7 +14,7 @@
   "environments": {
     "test": {
       "scripts": {
-        "run": "python coderbot.py"
+        "run": "python coderbot.py function.py"
       }
     }
   }

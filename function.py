@@ -121,7 +121,7 @@ async def dialogue_handler(client, message):
   try:
     if len(message.mentions) > 0:
       for name in message.mentions:
-        if "coderbot" == extract_names(name).lower():
+        if "coderbot" == extract_names(name)[0].lower():
           msg = "```System.out.println(\"Sigh... Okay, I guess you can be my little Pogchamp. {0}, Come here\")```"
           await message.channel.send(msg.format(extract_names(message.author)[0]))
 
