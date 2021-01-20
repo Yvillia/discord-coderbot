@@ -1,1 +1,1 @@
-worker: python coderbot.py
+worker: python coderbot.py function.py
