@@ -119,15 +119,21 @@ async def dialogue_handler(client, message):
   returns 1 on proper execution
   '''
   try:
+    
     if len(message.mentions) > 0:
       for name in message.mentions:
-        if "coderbot" == extract_names(name)[0].lower():
+        if 'pogchamp' not in message.content.lower() and "coderbot" == extract_names(name)[0].lower():
           msg = "```System.out.println(\"Sigh... Okay, I guess you can be my little Pogchamp. {0}, Come here\")```"
           await message.channel.send(msg.format(extract_names(message.author)[0]))
+          return
 
       if 'pogchamp' in message.content.lower():
-        if len(message.mentions) == 1:
+        if len(message.mentions) == 1 and "coderbot" == extract_names(message.mentions[0])[0].lower():
+          output = "... Umm, sure I guess I can be my own little Pogchamp, you bully! :sob:"
+        
+        elif len(message.mentions) == 1:
           output = "```System.out.println(\"Sigh... Okay, I guess you can be my little Pogchamp. {0}, Come here\")```".format(extract_names(message.mentions[0])[0])
+        
         else:
           editedStr = ''
           for i, user in enumerate(message.mentions):
@@ -145,6 +151,8 @@ async def dialogue_handler(client, message):
   return 1
 
 async def reaction_handler(client, message):
+
+
   '''
   Similar to dialogue_handler, adds reaction emotes to certain messages
 
@@ -156,7 +164,7 @@ async def reaction_handler(client, message):
   '''
   try:
     if "shit" in message.content.lower():
-      await message.add_reaction(":poop:")
+      await message.add_reaction("shit")
 
     if str(message.author) == "Mat#5553" and np.random.randint(1, 21) == 1:
       await message.add_reaction("<:thinkban:776586606358167602>")
@@ -175,5 +183,25 @@ async def reaction_handler(client, message):
     return 0
   return 1
 
-  
-  
+async def sleeping_protocol(myBot, message):
+  try:
+    if myBot.asleep and (message.content.lower() == "ohayo" or (len(message.mentions) > 0 and extract_names(message.mentions[0])[0].lower()) == "coderbot"):
+          await myBot.awaken()
+          await message.channel.send("Good Morning Everyone! :heart:")
+          return
+
+    elif not myBot.asleep and message.content.lower() == "oyasumi" or "stopbot" in message.content.lower().strip(): 
+      #and extract_names(message.author)[0].lower() == "yvillia":
+      await message.channel.send("Like totally nighty-nighters everyone! :kissing_heart:")
+      await myBot.oyasumi()
+      return
+
+    else:
+      return
+    
+  except Exception as inst:
+    exc_type, exc_obj, exc_tb = sys.exc_info()
+    errorMsg = "Error " + str(type(inst)) + ": \n" + str(inst) + "\nLine: " + str(exc_tb.tb_lineno)
+    await message.channel.send("```" + errorMsg + "```")
+    return 0
+  return 1
