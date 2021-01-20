@@ -119,6 +119,12 @@ async def dialogue_handler(client, message):
   returns 1 on proper execution
   '''
   try:
+
+    if "bad bot" in message.content.lower():
+      await message.channel.send("I am so sowwry! I prowomise towo dowo better UwU!")
+    
+    if "good bot" in message.content.lower():
+      await message.channel.send("Thank youwo vewwy muwuch! I will continuwue towo dowo my best OwO!")
     
     if len(message.mentions) > 0:
       for name in message.mentions:
@@ -190,7 +196,7 @@ async def sleeping_protocol(myBot, message):
           await message.channel.send("Good Morning Everyone! :heart:")
           return
 
-    elif not myBot.asleep and message.content.lower() == "oyasumi" or "stopbot" in message.content.lower().strip(): 
+    elif not myBot.asleep and message.content.lower() == "oyasumi" or "stop bot" in message.content.lower(): 
       #and extract_names(message.author)[0].lower() == "yvillia":
       await message.channel.send("Like totally nighty-nighters everyone! :kissing_heart:")
       await myBot.oyasumi()
