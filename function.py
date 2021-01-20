@@ -37,6 +37,15 @@ def extract_names(name):
   id = name[1]
   return user, id
 
+async def reportStatus(bot):
+  if bot.asleep:
+    for guild in bot.client.guilds:
+      await guild.get_channel(625049807140159529).send("Zzzzzz... ")
+  else:
+    for guild in bot.client.guilds:
+      await guild.get_channel(625049807140159529).send("I'm Awake and Healthy Everyone!")
+  return
+
 async def coin_flip(message):
   '''
   Has the bot flip a coin and send the results.
@@ -70,7 +79,7 @@ async def roll_dice(message):
   return 1 on proper execution
   '''
   try:
-    if 'roll' in message.content.lower().strip() and 'd' in message.content.lower():
+    if ('roll:' in message.content.lower().strip() or "!roll" in message.content.lower().strip()) and 'd' in message.content.lower():
         msg = message.content.lower().split('d', 1)
         start = msg[1]
         die_count = check_multiples(msg[0])
@@ -123,12 +132,12 @@ async def dialogue_handler(client, message):
     if "bad bot" in message.content.lower():
       await message.channel.send("I am so sowwry! I prowomise towo dowo better UwU!")
     
-    if "good bot" in message.content.lower():
+    elif "good bot" in message.content.lower():
       await message.channel.send("Thank youwo vewwy muwuch! I will continuwue towo dowo my best OwO!")
     
     if len(message.mentions) > 0:
       for name in message.mentions:
-        if 'pogchamp' not in message.content.lower() and "coderbot" == extract_names(name)[0].lower():
+        if 'pogchamp' not in message.content.lower() and extract_names(message.author)[0].lower() == extract_names(name)[0].lower():
           msg = "```System.out.println(\"Sigh... Okay, I guess you can be my little Pogchamp. {0}, Come here\")```"
           await message.channel.send(msg.format(extract_names(message.author)[0]))
           return
@@ -139,15 +148,19 @@ async def dialogue_handler(client, message):
         
         elif len(message.mentions) == 1:
           output = "```System.out.println(\"Sigh... Okay, I guess you can be my little Pogchamp. {0}, Come here\")```".format(extract_names(message.mentions[0])[0])
-        
+
         else:
           editedStr = ''
           for i, user in enumerate(message.mentions):
+            if extract_names(user)[0].lower() == "coderbot":
+              continue 
+
             if i != (len(message.mentions) - 1):
               editedStr += str(extract_names(user)[0]) + ", "
             else:
               editedStr += "and " + str(extract_names(user)[0])
           output = "```System.out.println(\"Sigh... Okay, I guess you can be my little Pogchamps. {0}, Come here\")```".format(editedStr)
+
         await message.channel.send(output)
   except Exception as inst:
     exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -169,9 +182,6 @@ async def reaction_handler(client, message):
   returns 1 for correct 
   '''
   try:
-    if "shit" in message.content.lower():
-      await message.add_reaction("shit")
-
     if str(message.author) == "Mat#5553" and np.random.randint(1, 21) == 1:
       await message.add_reaction("<:thinkban:776586606358167602>")
 
@@ -191,7 +201,7 @@ async def reaction_handler(client, message):
 
 async def sleeping_protocol(myBot, message):
   try:
-    if myBot.asleep and (message.content.lower() == "ohayo" or (len(message.mentions) > 0 and extract_names(message.mentions[0])[0].lower()) == "coderbot"):
+    if myBot.asleep and ("ohayo" in message.content.lower() or (len(message.mentions) > 0 and extract_names(message.mentions[0])[0].lower()) == "coderbot"):
           await myBot.awaken()
           await message.channel.send("Good Morning Everyone! :heart:")
           return

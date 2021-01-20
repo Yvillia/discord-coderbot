@@ -3,7 +3,7 @@ import discord
 class Bot:  
   def __init__(self, client_in):
     self.client = client_in
-    self.asleep = False
+    self.asleep = True
 
   async def oyasumi(self):
     sleeping = discord.Game("State: Asleep")
