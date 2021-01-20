@@ -10,13 +10,15 @@ def check_multiples(msg):
   
   returns number of dice thrown
   '''
+  # Reverses String Before d
   msg = msg.strip()
   msg = msg[::-1]
   i = 0
   while i < len(msg) and msg[i].isdigit():
     i += 1
-  if i == 0: return -1
+  if i == 0: return -1 # If No Given Numbers Return -1
   else:
+    # Reverses Again After Finding When the Numbers Stop
     number_of_dice = int(msg[0:i][::-1])
     return number_of_dice
 
@@ -37,27 +39,19 @@ def extract_names(name):
   id = name[1]
   return user, id
 
-async def reportStatus(bot):
-  if bot.asleep:
-    for guild in bot.client.guilds:
-      await guild.get_channel(625049807140159529).send("Zzzzzz... ")
-  else:
-    for guild in bot.client.guilds:
-      await guild.get_channel(625049807140159529).send("I'm Awake and Healthy Everyone!")
-  return
-
-async def coin_flip(message):
+async def coin_flip(myBot, message):
   '''
   Has the bot flip a coin and send the results.
   Responds to Flip and Coin in the same sentence
 
   Parameters:
+  myBot - Coderbot Class Found in bot.py
   message - discord.client.message object storing the received message
 
   returns 1 on proper execution
   '''
   try:
-    if 'coin' in message.content.lower().strip() and 'flip' in message.content.lower().strip():
+    if '!coin' in message.content.lower().strip() or '!flip' in message.content.lower().strip():
         if np.random.randint(0, high=2) == 0:
           await message.channel.send("Heads")
         else:
@@ -69,17 +63,19 @@ async def coin_flip(message):
     return 0
   return 1
 
-async def roll_dice(message):
+async def roll_dice(myBot, message):
   '''
   Rolls a die based on the message input
 
   Parameters:
+  myBot - Coderbot Class Found in bot.py
   message - discord.client.message object storing the received message
 
   return 1 on proper execution
   '''
   try:
-    if ('roll:' in message.content.lower().strip() or "!roll" in message.content.lower().strip()) and 'd' in message.content.lower():
+    stripped_msg = message.content.lower().strip()
+    if ('roll:' in stripped_msg or "!roll" in stripped_msg or "!dice" in stripped_msg or "!die" in stripped_msg) and 'd' in stripped_msg:
         msg = message.content.lower().split('d', 1)
         start = msg[1]
         die_count = check_multiples(msg[0])
@@ -117,12 +113,12 @@ async def roll_dice(message):
     return 0
   return 1  
 
-async def dialogue_handler(client, message):
+async def dialogue_handler(myBot, message):
   '''
   Handles dialogue responses for bot
 
   Parameters:
-    client - discord.client object (the bot user itself)
+    myBot - Coderbot Class Found in bot.py
     message - discord.client.message object being responded to
 
   returns 1 on proper execution
@@ -137,12 +133,12 @@ async def dialogue_handler(client, message):
     
     if len(message.mentions) > 0:
       for name in message.mentions:
-        if 'pogchamp' not in message.content.lower() and extract_names(message.author)[0].lower() == extract_names(name)[0].lower():
+        if '!pogchamp' not in message.content.lower() and extract_names(message.author)[0].lower() == extract_names(name)[0].lower():
           msg = "```System.out.println(\"Sigh... Okay, I guess you can be my little Pogchamp. {0}, Come here\")```"
           await message.channel.send(msg.format(extract_names(message.author)[0]))
           return
 
-      if 'pogchamp' in message.content.lower():
+      if '!pogchamp' in message.content.lower():
         if len(message.mentions) == 1 and "coderbot" == extract_names(message.mentions[0])[0].lower():
           output = "... Umm, sure I guess I can be my own little Pogchamp, you bully! :sob:"
         
@@ -169,14 +165,14 @@ async def dialogue_handler(client, message):
     return 0
   return 1
 
-async def reaction_handler(client, message):
+async def reaction_handler(myBot, message):
 
 
   '''
   Similar to dialogue_handler, adds reaction emotes to certain messages
 
   Parameters:
-    client - discord.client object (the bot itself)
+    myBot - Coderbot Class Found in bot.py
     message - discord.client.message object being responded to
 
   returns 1 for correct 
@@ -188,7 +184,7 @@ async def reaction_handler(client, message):
     if str(message.author) == "PokeProfRob#2670" and np.random.randint(1, 21) == 1:
       await message.add_reaction("<:mat:792252631765483520>")
 
-    if message.content.lower().startswith('poll:'):
+    if message.content.lower().startswith('poll:') or message.content.lower().startswith('!poll'):
         await message.add_reaction("✅")
         await message.add_reaction("❌")
 
