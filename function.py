@@ -221,7 +221,7 @@ async def sleeping_protocol(myBot, message):
           await message.channel.send("Good Morning Everyone! :heart:")
           return
 
-    elif not myBot.asleep and message.content.lower() == "oyasumi" or "stop bot" in message.content.lower(): 
+    elif not myBot.asleep and ('oyasumi' in message.content.lower() or "stop bot" in message.content.lower() or ("good night" in message.content.lower().strip() and extract_names(myBot.myID)[0] in message.mentions)): 
       #and extract_names(message.author)[0].lower() == "yvillia":
       await message.channel.send("Like totally nighty-nighters everyone! :kissing_heart:")
       await myBot.oyasumi()
