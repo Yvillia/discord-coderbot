@@ -64,6 +64,11 @@ async def on_ready():
 @client.event
 async def on_message(message):
   try:
+    # Kill Switch
+    if "!kill" in message.content.lower():
+      await myBot.channels['status'].send("Process Killed: Sorry Guys :sob:!")
+      await client.logout()
+
     # If Bot Sends the Message Return !!! DO NOT REMOVE !!!
     if message.author == client.user:
       return
@@ -95,13 +100,10 @@ async def on_error(event, *args, **kwargs):
   await myBot.oyasumi()
   return
 
-@client.event
-async def on_typing(channel, user, when):
-  # Current Not Functioning
-  async with channel.typing():
-    await asyncio.sleep(3)
-    await channel.send("Dones!")
-  return
+# @client.event
+# async def on_typing(channel, user, when):
+
+#   return
 
 @client.event
 async def on_message_delete(message):
