@@ -126,8 +126,7 @@ async def on_reaction_add(reaction, user):
 async def on_disconnect():
   try:
     await myBot.channels['status'].send("Sorry Everyone! I'll be back in a bit, having some... technical... difficulties.")
-    schedstop.set()
-
+    
   except Exception as inst:
     _, _, exc_tb = sys.exc_info()
     errorMsg = "Error " + str(type(inst)) + ": \n" + str(inst) + "\nLine: " + str(exc_tb.tb_lineno)
