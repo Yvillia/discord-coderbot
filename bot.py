@@ -36,7 +36,7 @@ class Bot:
     else:
       await asyncio.sleep(1800)
 
-    reportStatus()
+    self.reportStatus()
     return
 
   def updateInformation(self, channels, guildID, myID):
