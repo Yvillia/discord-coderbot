@@ -122,16 +122,16 @@ async def on_reaction_add(reaction, user):
   await reaction.message.add_reaction(reaction.emoji)
   return
 
-@client.event
-async def on_disconnect():
-  try:
-    await myBot.channels['status'].send("Sorry Everyone! I'll be back in a bit, having some... technical... difficulties.")
+# @client.event
+# async def on_disconnect():
+#   try:
+#     await myBot.channels['status'].send("Sorry Everyone! I'll be back in a bit, having some... technical... difficulties.")
     
-  except Exception as inst:
-    _, _, exc_tb = sys.exc_info()
-    errorMsg = "Error " + str(type(inst)) + ": \n" + str(inst) + "\nLine: " + str(exc_tb.tb_lineno)
-    await myBot.channels['bottest'].send("```" + errorMsg + "```")
-  return
+#   except Exception as inst:
+#     _, _, exc_tb = sys.exc_info()
+#     errorMsg = "Error " + str(type(inst)) + ": \n" + str(inst) + "\nLine: " + str(exc_tb.tb_lineno)
+#     await myBot.channels['bottest'].send("```" + errorMsg + "```")
+#   return
 
 @client.event
 async def on_raw_reaction_remove(payload):
