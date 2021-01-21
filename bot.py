@@ -35,6 +35,8 @@ class Bot:
       await asyncio.sleep((future-now).seconds)
     else:
       await asyncio.sleep(1800)
+
+    reportStatus()
     return
 
   def updateInformation(self, channels, guildID, myID):
