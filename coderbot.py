@@ -119,7 +119,8 @@ async def on_message_edit(before, after):
 
 @client.event
 async def on_reaction_add(reaction, user):
-  await reaction.message.add_reaction(reaction.emoji)
+  if not myBot.asleep:
+    await reaction.message.add_reaction(reaction.emoji)
   return
 
 # @client.event
