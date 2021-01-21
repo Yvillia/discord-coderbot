@@ -55,7 +55,7 @@ TEMPLATES = [
             ]
         },
     }
-
+]
 
 WSGI_APPLICATION = "coderweb.wsgi.application"
 
