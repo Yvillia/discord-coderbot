@@ -6,6 +6,7 @@ from bot import Bot
 import function as f
 import asyncio
 import json
+import threading
 
 # List of Discord IDs for Bot Channels
 ID = {
@@ -27,6 +28,13 @@ asleep = discord.Game("State: Asleep")
 # Bot Class Intialization
 myBot = Bot(client, ID)
 
+# task_manager = commands.Bot(command_prefix="!")
+
+@tasks.loop(hours=1.0)
+async def send_message():
+  if myBot.status != '':
+    await myBot.channels['status'].send(myBot.status)
+
 @client.event
 async def on_ready():
   try: 
@@ -45,8 +53,14 @@ async def on_ready():
       'music': epicGuild.get_channel(ID['musicID'])
     }
 
+    # Creating Status Reporting Thread
+    x = threading.Thread(target=f.schedule_thread, args=(myBot,))
+    x.start()
+
     # Update Asynchronous Information After Client Login
     myBot.updateInformation(channels, epicGuild, coderBot)
+
+    send_message.start()
 
     # Success and Bot Starts Up in Sleep State
     print('\n Logged in as: {0.user}\n'.format(client))
@@ -54,8 +68,7 @@ async def on_ready():
 
     # Availability Indicator and Half-Hourly Status Report
     await myBot.channels['status'].send("Hey Everyone! I am alive and sleepy! Wake me up if ya need me OwO!")    
-    await myBot.reportStatus()
-  
+    
   except Exception as inst:
     _, _, exc_tb = sys.exc_info()
     errorMsg = "Error " + str(type(inst)) + ": \n" + str(inst) + "\nLine: " + str(exc_tb.tb_lineno)

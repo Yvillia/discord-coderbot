@@ -1,9 +1,11 @@
 import discord
 from datetime import datetime, timedelta
 import asyncio
+import time
 
 class Bot:  
   def __init__(self, client_in, ids):
+    self.status = ""
     self.client = client_in
     self.asleep = True
     self.IDs = ids
@@ -18,25 +20,22 @@ class Bot:
     await self.client.change_presence(activity = awake)
     self.asleep = False
 
-  async def reportStatus(self):
+  def reportStatus(self):
     if self.asleep:
-      for guild in self.client.guilds:
-        await guild.get_channel(625049807140159529).send("Status: Zzzzzz... ")
+      self.status = "Status: Zzzzzz... "
     else:
-      for guild in self.client.guilds:
-        await guild.get_channel(625049807140159529).send("Status: I'm Awake and Healthy Everyone!")
+      self.status = "Status: I'm Awake and Healthy Everyone!"
 
     if datetime.now().minute != 0:
-      minute = 00
+      minute = 0
       now = datetime.now()
       future = datetime(now.year, now.month, now.day, now.hour, minute)
       if now.minute > minute:
           future += timedelta(hours=1)
-      await asyncio.sleep((future-now).seconds)
+      time.sleep((future-now).seconds)
     else:
-      await asyncio.sleep(1800)
-
-    self.reportStatus()
+      time.sleep(600)
+    
     return
 
   def updateInformation(self, channels, guildID, myID):
