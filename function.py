@@ -3,6 +3,9 @@ import numpy as np
 import discord
 import json
 import asyncio
+import threading
+
+# async def reminder(timer_len):
 
 def schedule_thread(myBot):
   while True:
@@ -159,6 +162,11 @@ async def dialogue_handler(myBot, message):
       await message.channel.send("Umumu, I see you have chosen... Banishment " + extract_names(message.author)[0] + "!! Bai Bai!")
       await asyncio.sleep(5)
       await message.channel.send("... Juuuuuuusssst Kidding 😜!!!")
+      return
+
+    # if "!reminder" in message.content.lower():
+    #   threading.Thread(target=f.schedule_thread, args=(myBot,)).start()
+
 
     # Checks Mentions for Individual/Group Messages
     if len(message.mentions) > 0:

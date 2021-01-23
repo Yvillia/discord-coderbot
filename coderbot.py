@@ -7,6 +7,9 @@ import function as f
 import asyncio
 import json
 import threading
+from redditAPI import redditAPI
+from datetime import datetime, timedelta
+import time
 
 # List of Discord IDs for Bot Channels
 ID = {
@@ -16,11 +19,31 @@ ID = {
   'bottestID': 800872499507101697,
   'archiveID': 801533100588269609,
   'musicID': 801529894899154996,
-  'coderbotID': 800867858913165333
+  'coderbotID': 800867858913165333,
+  'awwID': 802393034104242199,
+  'uiucID': 802393049459195914,
+  'dataisbeautifulID': 802393080417615882,
+  'learnprogrammingID': 802393170356600854,
+  'programmerhumorID': 802393191046840345,
+  'ffxivID': 802393280721584138
 }
+
+REDDIT_ID = os.getenv('REDDIT_ID')
+REDDIT_SECRET = os.getenv('REDDIT_SECRET')
+REDDIT_USER = os.getenv('REDDIT_USER')
+REDDIT_PASS = os.getenv('REDDIT_PASS')
 
 # Client Spinup
 client = discord.Client()
+
+# Reddit API Instance
+redd_inst = redditAPI(REDDIT_ID, REDDIT_SECRET, REDDIT_USER, REDDIT_PASS)
+
+subreddit_list = [
+  redd_inst.reddit.subreddit("aww"), 
+  redd_inst.reddit.subreddit("learnprogramming"), redd_inst.reddit.subreddit("programmerhumor"), redd_inst.reddit.subreddit("dataisbeautiful"), redd_inst.reddit.subreddit("UIUC"), 
+  redd_inst.reddit.subreddit("ffxiv")
+  ]
 
 # Asleep Status for Bot Avatar
 asleep = discord.Game("State: Asleep")
@@ -30,8 +53,33 @@ myBot = Bot(client, ID)
 
 # task_manager = commands.Bot(command_prefix="!")
 
-@tasks.loop(hours=1.0)
+@tasks.loop(hours=24.0)
+async def post_saved():
+  # print("here")
+  # for saved_post in redd_inst.me.saved(limit=None):
+  #   print(saved_post)
+    # redd_inst.reddit.submission(id=saved_post.id).unsave()
+  for subreddit in subreddit_list:
+    curr_channel = myBot.channels[str(subreddit.display_name).lower()]
+    await curr_channel.send(datetime.now())
+    for hot_post in subreddit.hot(limit=3):
+      await curr_channel.send(hot_post.url)
+
+@tasks.loop(hours=0.5)
 async def send_message():
+  now = datetime.now()
+  if now.minute != 0 or now.minute != 30:
+    if now.minute < 15 or now.minute > 45:
+      minute = 0
+    else:
+      minute = 30
+
+    future = datetime(now.year, now.month, now.day, now.hour, minute)
+    if now.minute > minute:
+        future += timedelta(hours=1)
+    await asyncio.sleep((future-now).seconds)
+
+  await asyncio.sleep(3)
   if myBot.status != '':
     await myBot.channels['status'].send(myBot.status)
 
@@ -45,22 +93,17 @@ async def on_ready():
     coderBot = epicGuild.get_member(ID['coderbotID'])
 
     # Dictionary of Channel Objects
-    channels = {
-      'status': epicGuild.get_channel(ID['statusID']),
-      'commentary': epicGuild.get_channel(ID['commentaryID']),
-      'bottest': epicGuild.get_channel(ID['bottestID']),
-      'archive': epicGuild.get_channel(ID['archiveID']),
-      'music': epicGuild.get_channel(ID['musicID'])
-    }
-
+    channels = {}
+    for name, id in zip(ID.keys(), ID.values()):
+      if name == 'epicID':
+        continue
+      channels.update({name[:-2]: epicGuild.get_channel(id)}) 
+      
     # Creating Status Reporting Thread
-    x = threading.Thread(target=f.schedule_thread, args=(myBot,))
-    x.start()
+    threading.Thread(target=f.schedule_thread, args=(myBot,)).start()
 
     # Update Asynchronous Information After Client Login
     myBot.updateInformation(channels, epicGuild, coderBot)
-
-    send_message.start()
 
     # Success and Bot Starts Up in Sleep State
     print('\n Logged in as: {0.user}\n'.format(client))
@@ -68,7 +111,13 @@ async def on_ready():
 
     # Availability Indicator and Half-Hourly Status Report
     await myBot.channels['status'].send("Hey Everyone! I am alive and sleepy! Wake me up if ya need me OwO!")    
+
+    # Reddit Tasks Begin
+    post_saved.start()
     
+    # Status Update Task Begin
+    send_message.start()
+
   except Exception as inst:
     _, _, exc_tb = sys.exc_info()
     errorMsg = "Error " + str(type(inst)) + ": \n" + str(inst) + "\nLine: " + str(exc_tb.tb_lineno)
@@ -121,11 +170,18 @@ async def on_error(event, *args, **kwargs):
 @client.event
 async def on_message_delete(message):
   # Store Messages in Archive So Everyone Can Have Message Privileges
+  if message.author.lower() == "coderbot":
+    return
+
+  # Store Deleted Messages in Archive So Everyone Can Have Message Privileges
   await myBot.channels['archive'].send("==================\nMessage Type: Deletion\nAuthor: " + str(f.extract_names(message.author)[0]) + "\nContent: " + str(message.content) + "\n==================")
   return
 
 @client.event
 async def on_message_edit(before, after):
+  if before.author.lower() == "coderbot":
+    return
+
   # Store Messages in Archive So Everyone Can Have Message Privileges
   await myBot.channels['archive'].send("==================\nMessage Type: Edit\nAuthor: " + str(f.extract_names(before.author)[0]) + "\nContent (Before): " + str(before.content) + "\nContent (After): " + str(after.content) + "\n==================")
   return

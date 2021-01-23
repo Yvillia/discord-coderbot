@@ -5,7 +5,7 @@ import time
 
 class Bot:  
   def __init__(self, client_in, ids):
-    self.status = ""
+    self.status = "Status: Zzzzzz... "
     self.client = client_in
     self.asleep = True
     self.IDs = ids
@@ -25,16 +25,7 @@ class Bot:
       self.status = "Status: Zzzzzz... "
     else:
       self.status = "Status: I'm Awake and Healthy Everyone!"
-
-    if datetime.now().minute != 0:
-      minute = 0
-      now = datetime.now()
-      future = datetime(now.year, now.month, now.day, now.hour, minute)
-      if now.minute > minute:
-          future += timedelta(hours=1)
-      time.sleep((future-now).seconds)
-    else:
-      time.sleep(600)
+    time.sleep(600)
     
     return
 
