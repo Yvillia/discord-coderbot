@@ -62,7 +62,7 @@ async def post_saved():
   for subreddit in subreddit_list:
     curr_channel = myBot.channels[str(subreddit.display_name).lower()]
     await curr_channel.send(datetime.now())
-    for hot_post in subreddit.hot(limit=3):
+    for hot_post in subreddit.hot(limit=1):
       await curr_channel.send(hot_post.url)
 
 @tasks.loop(hours=0.5)
@@ -98,7 +98,7 @@ async def on_ready():
       if name == 'epicID':
         continue
       channels.update({name[:-2]: epicGuild.get_channel(id)}) 
-      
+
     # Creating Status Reporting Thread
     threading.Thread(target=f.schedule_thread, args=(myBot,)).start()
 
@@ -170,7 +170,7 @@ async def on_error(event, *args, **kwargs):
 @client.event
 async def on_message_delete(message):
   # Store Messages in Archive So Everyone Can Have Message Privileges
-  if message.author.lower() == "coderbot":
+  if str(message.author).lower() == "coderbot":
     return
 
   # Store Deleted Messages in Archive So Everyone Can Have Message Privileges
