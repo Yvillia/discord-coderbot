@@ -1,1 +1,1 @@
-worker: python coderbot.py function.py bot.py
+worker: python coderbot.py function.py bot.py redditAPI.py
