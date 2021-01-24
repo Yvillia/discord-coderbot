@@ -158,7 +158,7 @@ async def on_message(message):
 @client.event
 async def on_error(event, *args, **kwargs):
   # Error Message and Sets Bot to Asleep
-  await myBot.channels['status'].send("Oopsies, Sorry Everyone! I'm causing problems :slight_frown:! I'll sleep it off!\n Error Event: " + str(event) + "\n Args: " + str(args) + "\n Kwargs: " + str(kwargs))
+  await myBot.channels['archive'].send("Oopsies, Sorry Everyone! I'm causing problems :slight_frown:! I'll sleep it off!\n Error Event: " + str(event) + "\n Args: " + str(args) + "\n Kwargs: " + str(kwargs))
   await myBot.oyasumi()
   return
 
@@ -179,7 +179,7 @@ async def on_message_delete(message):
 
 @client.event
 async def on_message_edit(before, after):
-  if before.author.lower() == "coderbot":
+  if str(before.author).lower() == "coderbot":
     return
 
   # Store Messages in Archive So Everyone Can Have Message Privileges
