@@ -5,6 +5,7 @@ import json
 import asyncio
 import threading
 
+
 # async def reminder(timer_len):
 
 def schedule_thread(myBot):
@@ -195,12 +196,13 @@ async def dialogue_handler(myBot, message):
         elif len(message.mentions) == 1:
           member = message.mentions[0]
           og_name = extract_names(member)[0]
-          print(member.id)
           if type(message.guild.get_member(member.id)) != None:
             await message.channel.send("OOPSIE WOOPSIE!! Uwu Did Someone make a fucky wucky!?! A wittle fucko boingo!? Better be more Cawreful! Enjoy the Nickname for a little while Ye Ol' Tart {0} ;3!".format(extract_names(member)[0]))
-            await message.guild.get_member(member.id).edit(nick = "Ye Ol' Tart " + og_name)
-            await asyncio.sleep(60)
-            await message.guild.get_member(member.id).edit(nick = og_name)
+            if message.guild.get_member(member.id) != None:
+              await message.guild.get_member(member.id).edit(nick = "Ye Ol' Tart " + og_name)
+              await asyncio.sleep(60)
+              await message.channel.send("Okay Ban-Time is Uppers :3")
+              await message.guild.get_member(member.id).edit(nick = og_name)
           
           else:
             await message.channel.send("Umm, Sorry technical difficulties! Are you shore that person exists :3?")
@@ -222,11 +224,13 @@ async def dialogue_handler(myBot, message):
           for member in message.mentions:
             if extract_names(member)[0].lower() == "coderbot":
               continue
-              
-            og_name = message.guild.get_member(member.id).name
-            await message.guild.get_member(member.id).edit(nick = "Ye Ol' Tart " + og_name)
-            await asyncio.sleep(60)
-            await message.guild.get_member(member.id).edit(nick = og_name)
+            
+            if message.guild.get_member(member.id) != None and not message.guild.get_member(member.id).top_role.name.lower() == "snail queen":
+              og_name = message.guild.get_member(member.id).name
+              await message.guild.get_member(member.id).edit(nick = "Ye Ol' Tart " + og_name)
+              await asyncio.sleep(60)
+              await message.channel.send("Okay, Ban Time Uppers :3")
+              await message.guild.get_member(member.id).edit(nick = og_name)
 
       elif '!pogchamp' in message.content.lower():
         if len(message.mentions) == 1 and "coderbot" == extract_names(message.mentions[0])[0].lower():

@@ -10,6 +10,8 @@ import threading
 from redditAPI import redditAPI
 from datetime import datetime, timedelta
 import time
+intents = discord.Intents.default()
+intents.members = True
 
 # List of Discord IDs for Bot Channels
 ID = {
@@ -34,15 +36,17 @@ REDDIT_USER = os.getenv('REDDIT_USER')
 REDDIT_PASS = os.getenv('REDDIT_PASS')
 
 # Client Spinup
-client = discord.Client()
+client = discord.Client(intents=intents)
 
 # Reddit API Instance
 redd_inst = redditAPI(REDDIT_ID, REDDIT_SECRET, REDDIT_USER, REDDIT_PASS)
 
 subreddit_list = [
-  redd_inst.reddit.subreddit("aww"), 
-  redd_inst.reddit.subreddit("learnprogramming"), redd_inst.reddit.subreddit("programmerhumor"), redd_inst.reddit.subreddit("dataisbeautiful"), redd_inst.reddit.subreddit("UIUC"), 
-  redd_inst.reddit.subreddit("ffxiv")
+  # redd_inst.reddit.subreddit("aww"), 
+  # redd_inst.reddit.subreddit("learnprogramming"), redd_inst.reddit.subreddit("programmerhumor"), 
+  redd_inst.reddit.subreddit("dataisbeautiful"), 
+  # redd_inst.reddit.subreddit("UIUC"), 
+  # redd_inst.reddit.subreddit("ffxiv")
   ]
 
 # Asleep Status for Bot Avatar
@@ -51,7 +55,7 @@ asleep = discord.Game("State: Asleep")
 # Bot Class Intialization
 myBot = Bot(client, ID)
 
-# task_manager = commands.Bot(command_prefix="!")
+# task_manager = commands.Bot(command_prefix="!", intents=intents)
 
 @tasks.loop(hours=24.0)
 async def post_saved():
