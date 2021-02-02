@@ -210,7 +210,7 @@ async def on_raw_reaction_remove(payload):
   # member_self = await client.get_guild(625041679325462571).get_member(800867858913165333)
   # await reaction.message.channel.send("Triggered")
   # print(member_self)
-  await reaction.message.remove_reaction(reaction.emoji, myBot.myID)
+  #await reaction.message.remove_reaction(reaction.emoji, myBot.myID)
   return
 
 @client.event
