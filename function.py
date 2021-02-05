@@ -69,10 +69,7 @@ async def coin_flip(myBot, message):
         else:
           await message.channel.send("Tails")
   except Exception as inst:
-    exc_type, exc_obj, exc_tb = sys.exc_info()
-    errorMsg = "Error " + str(type(inst)) + ": \n" + str(inst) + "\nLine: " + str(exc_tb.tb_lineno)
-    await message.channel.send("```" + errorMsg + "```")
-    return 0
+    return await fuckup(inst, message)
   return 1
 
 async def roll_dice(myBot, message):
@@ -119,10 +116,7 @@ async def roll_dice(myBot, message):
             await message.add_reaction("<:thinkban:776586606358167602>")
           await message.channel.send(output)
   except Exception as inst:
-    exc_type, exc_obj, exc_tb = sys.exc_info()
-    errorMsg = "Error " + str(type(inst)) + ": \n" + str(inst) + "\nLine: " + str(exc_tb.tb_lineno)
-    await message.channel.send("```" + errorMsg + "```")
-    return 0
+    return await fuckup(inst, message)
   return 1  
 
 async def dialogue_handler(myBot, message):
@@ -138,25 +132,10 @@ async def dialogue_handler(myBot, message):
   try:
     # Bad Bot and Good Bot Messages With Live Updates to Statistics.json
     if "bad bot" in message.content.lower():
-      await message.channel.send("I am so sowwry! I prowomise towo dowo better UwU!")
-      # Statistics JSON File
-      with open('statistics.json', 'r') as stats:
-        data = json.load(stats)
-        stats.close()
-      with open('statistics.json', 'w') as stats:
-        data['Phrases']['Bad Bot'] += 1
-        json.dump(data, stats)
-        stats.close()
+      await good_bot(False, message)
     
     elif "good bot" in message.content.lower():
-      await message.channel.send("Thank youwo vewwy muwuch! I will continuwue towo dowo my best OwO!")
-      with open('statistics.json', 'r') as stats:
-        data = json.load(stats)
-        stats.close()
-      with open('statistics.json', 'w') as stats:
-        data['Phrases']['Good Bot'] += 1
-        json.dump(data, stats)
-        stats.close()
+      await good_bot(True, message)
 
     # Ban Commentary
     if "!ban" in message.content.lower() and len(message.mentions) == 0:
@@ -255,10 +234,7 @@ async def dialogue_handler(myBot, message):
         await message.channel.send(output)
 
   except Exception as inst:
-    exc_type, exc_obj, exc_tb = sys.exc_info()
-    errorMsg = "Error " + str(type(inst)) + ": \n" + str(inst) + "\nLine: " + str(exc_tb.tb_lineno)
-    await message.channel.send("```" + errorMsg + "```")
-    return 0
+    return await fuckup(inst, message)
 
   return 1
 
@@ -285,10 +261,7 @@ async def reaction_handler(myBot, message):
         await message.add_reaction("❌")
 
   except Exception as inst:
-    exc_type, exc_obj, exc_tb = sys.exc_info()
-    errorMsg = "Error " + str(type(inst)) + ": \n" + str(inst) + "\nLine: " + str(exc_tb.tb_lineno)
-    await message.channel.send("```" + errorMsg + "```")
-    return 0
+    return await fuckup(inst, message)
   return 1
 
 async def sleeping_protocol(myBot, message):
@@ -308,8 +281,53 @@ async def sleeping_protocol(myBot, message):
       return
     
   except Exception as inst:
-    exc_type, exc_obj, exc_tb = sys.exc_info()
-    errorMsg = "Error " + str(type(inst)) + ": \n" + str(inst) + "\nLine: " + str(exc_tb.tb_lineno)
-    await message.channel.send("```" + errorMsg + "```")
-    return 0
+    return await fuckup(inst, message)
   return 1
+
+async def good_bot(isGood, message):
+  '''
+  Outputs a message depending on whether the user said good bot or bad bot
+  then log the data in statistics.json
+
+  Parameters:
+    isGood - boolean used to say if the bot is good or not
+    message - discord.client.message object being responded to
+
+  returns 1 for correct 
+  '''
+  try:
+    response = ""
+    dataLog = ""
+    if (isGood):
+      response = "Thank youwo vewwy muwuch! I will continuwue towo dowo my best OwO!"
+      dataLog = "Good Bot"
+    else:
+      response = "I am so sowwry! I prowomise towo dowo better UwU!"
+      dataLog = "Bad Bot"
+
+    await message.channel.send(response)
+    # Statistics JSON File
+    with open('statistics.json', 'r') as stats:
+      data = json.load(stats)
+      stats.close()
+    with open('statistics.json', 'w') as stats:
+      data['Phrases'][dataLog] += 1
+      json.dump(data, stats)
+      stats.close()
+    return 1
+  except Exception as inst:
+    return await fuckup(inst, message)
+
+async def fuckup(inst, message):
+  '''
+  Outputs an error that was thrown during the execution of an asynchronous function
+
+  Parameters:
+    inst - The Exception object thrown
+
+  returns 0
+  '''
+  exc_type, exc_obj, exc_tb = sys.exc_info()
+  errorMsg = "Error " + str(type(inst)) + ": \n" + str(inst) + "\nLine: " + str(exc_tb.tb_lineno)
+  await message.channel.send("```" + errorMsg + "```")
+  return 0

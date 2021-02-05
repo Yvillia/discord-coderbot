@@ -14,8 +14,9 @@ intents = discord.Intents.default()
 intents.members = True
 
 # List of Discord IDs for Bot Channels
+#Real Channels, uncomment this before merging
 ID = {
-  'epicID': 625041679325462571,
+  'serverID': 625041679325462571,
   'statusID': 625049807140159529,
   'commentaryID': 801521814692954153,
   'bottestID': 800872499507101697,
@@ -30,6 +31,14 @@ ID = {
   'ffxivID': 802393280721584138
 }
 
+#Test Channels, comment this before merging
+# ID = {
+#   'serverID': 614887444591935498,
+#   'statusID': 614892196738498569,
+#   'commentaryID': 614887444591935584,
+#   'coderbotID': 337998244317495317
+# }
+
 REDDIT_ID = os.getenv('REDDIT_ID')
 REDDIT_SECRET = os.getenv('REDDIT_SECRET')
 REDDIT_USER = os.getenv('REDDIT_USER')
@@ -38,16 +47,23 @@ REDDIT_PASS = os.getenv('REDDIT_PASS')
 # Client Spinup
 client = discord.Client(intents=intents)
 
+#Made this resilient if reddit API stuff isn't found
+redd_inst = None
 # Reddit API Instance
-redd_inst = redditAPI(REDDIT_ID, REDDIT_SECRET, REDDIT_USER, REDDIT_PASS)
+if (REDDIT_ID is not None):
+  redd_inst = redditAPI(REDDIT_ID, REDDIT_SECRET, REDDIT_USER, REDDIT_PASS)
+else:
+  print ("QwQ I'm sowwy... I can't see the weddit api...")
 
-subreddit_list = [
-  # redd_inst.reddit.subreddit("aww"), 
-  # redd_inst.reddit.subreddit("learnprogramming"), redd_inst.reddit.subreddit("programmerhumor"), 
-  redd_inst.reddit.subreddit("dataisbeautiful"), 
-  # redd_inst.reddit.subreddit("UIUC"), 
-  # redd_inst.reddit.subreddit("ffxiv")
-  ]
+subreddit_list = []
+if (redd_inst is not None):
+  subreddit_list = [
+    # redd_inst.reddit.subreddit("aww"), 
+    # redd_inst.reddit.subreddit("learnprogramming"), redd_inst.reddit.subreddit("programmerhumor"), 
+    redd_inst.reddit.subreddit("dataisbeautiful"), 
+    # redd_inst.reddit.subreddit("UIUC"), 
+    # redd_inst.reddit.subreddit("ffxiv")
+    ]
 
 # Asleep Status for Bot Avatar
 asleep = discord.Game("State: Asleep")
@@ -91,7 +107,7 @@ async def send_message():
 async def on_ready():
   try: 
     # Epic Coders Guild Object
-    epicGuild = client.get_guild(ID['epicID'])
+    epicGuild = client.get_guild(ID['serverID'])
 
     # CoderBot Member Object
     coderBot = epicGuild.get_member(ID['coderbotID'])
@@ -99,7 +115,7 @@ async def on_ready():
     # Dictionary of Channel Objects
     channels = {}
     for name, id in zip(ID.keys(), ID.values()):
-      if name == 'epicID':
+      if name == 'serverID':
         continue
       channels.update({name[:-2]: epicGuild.get_channel(id)}) 
 
