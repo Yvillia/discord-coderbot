@@ -1,11 +1,11 @@
 FROM  python:3
 
-WORKDIR /.
+WORKDIR /./
 
-COPY requirements.txt ./
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-CMD ["python3 coderbot.py function.py bot.py redditAPI.py"]
+CMD ["cd src", "python3 coderbot.py function.py bot.py redditAPI.py"]
 
