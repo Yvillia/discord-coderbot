@@ -1,11 +1,17 @@
 ---
 name: Bug report
 about: Create a report to help us improve
-title: ''
-labels: ''
+title: "[BUG]"
+labels: bug
 assignees: ''
 
 ---
+
+### Summary of Bug: 
+
+
+### The below if for extra detail if you run out of description ideas!
+
 
 **Describe the bug**
 A clear and concise description of what the bug is.
