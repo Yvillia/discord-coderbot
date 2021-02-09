@@ -251,4 +251,5 @@ async def on_guild_emojis_update(guild, before, after):
 async def on_guild_role_update(before, after):
   return
 
-client.run(os.getenv('TOKEN'))
+if not os.getenv('TOKEN') is None:
+  client.run(os.getenv('TOKEN'))
