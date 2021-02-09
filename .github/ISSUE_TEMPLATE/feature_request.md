@@ -1,15 +1,15 @@
 ---
 name: Feature request
-about: Suggest an idea for this project
+about: Request a feature for this project
 title: ''
 labels: ''
 assignees: ''
 
 ---
 
-Summary of Idea:
+### Summary of Idea:
 
-The below is optional if you are interested in providing more details:
+### The below is optional if you are interested in providing more details!
 
 **Is your feature request related to a problem? Please describe.**
 A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
