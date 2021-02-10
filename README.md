@@ -65,8 +65,15 @@ We are working to streamline this! We will try to make this as least painful as 
   
 ## Future Functionalities/Ideas for Development
 
-<!-- issueTable -->
+<!-- openIssueTable -->
 
-<!-- issueTable -->
+<!-- openIssueTable -->
+
+## Completed Functionalites and Issues
+
+<!-- closedIssueTable -->
+
+<!-- closedIssueTable -->
+
 
 
