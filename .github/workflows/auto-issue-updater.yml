@@ -13,6 +13,8 @@ jobs:
     steps:   
     - name: checkout
       uses: actions/checkout@v2
+      with:
+        GITHUB_TOKEN: "${{ secrets.GTIHUB_TOKEN }}"
     - name: Auto Issue List in README
       uses: seed-of-apricot/issue-list-readme@v1.1.0
       with:
@@ -35,5 +37,6 @@ jobs:
     - name: Push Updates to Git
       uses: ad-m/github-push-action@master
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-  
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
