@@ -6,6 +6,9 @@
  - [Repository Layout](https://github.com/nnrogers515/discord-coderbot#repository-layout)
  - [Functionalities](https://github.com/nnrogers515/discord-coderbot#functionalities)
  - [Contributors](https://github.com/nnrogers515/discord-coderbot#contributors)
+ - [Current Issues Open for Development](https://github.com/nnrogers515/discord-coderbot#current-issues-open-for-development)
+ - [Completed Issues](https://github.com/nnrogers515/discord-coderbot#completed-issues)
+
 
 ## Gist
 Discord Bot for those interested in Anime and Programming Memes (and also a bunch of other fun functionalities!)
@@ -77,7 +80,7 @@ We are working to streamline this! We will try to make this as least painful as 
 ## Contributors
   If you are interested in contributed to the codebase, just email me at yvillia-bot@gmail.com or contact me in some other way! Alway welcoming new people, Although the generality of Coderbot is still currently in the works, so it will be a little while before it is easy to incorporate her into another's server! 
   
-## Future Functionalities/Ideas for Development
+## Current Issues Open for Development
 
 <details>
   <summary> <strong>Click to Expand</strong></summary>
@@ -106,7 +109,7 @@ We are working to streamline this! We will try to make this as least painful as 
 
 </details>
 
-## Completed Functionalites and Issues
+## Completed Issues
 
 <details>
  <summary> <strong>Click to Expand</strong></summary>
