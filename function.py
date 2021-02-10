@@ -4,6 +4,7 @@ import discord
 import json
 import asyncio
 import threading
+import requests
 
 
 # async def reminder(timer_len):
@@ -130,25 +131,40 @@ async def dialogue_handler(myBot, message):
   returns 1 on proper execution
   '''
   try:
+
+    #the bot can't react to its own commands
+    #mostly useful with the help command
+    if message.author == "CoderBot#9778":
+      return
+
     # Bad Bot and Good Bot Messages With Live Updates to Statistics.json
     if "bad bot" in message.content.lower():
       await good_bot(False, message)
+      return
     
     elif "good bot" in message.content.lower():
       await good_bot(True, message)
+      return
 
     #Magic 8ball.
     if "!8ball" in message.content.lower():
       await eightball(message)
+      return
 
     if "!help" in message.content.lower():
       await displayHelp(message)
+      return
 
     # Ban Commentary
     if "!ban" in message.content.lower() and len(message.mentions) == 0:
       await message.channel.send("Umumu, I see you have chosen... Banishment " + extract_names(message.author)[0] + "!! Bai Bai!")
       await asyncio.sleep(5)
       await message.channel.send("... Juuuuuuusssst Kidding 😜!!!")
+      return
+
+    if message.content.startswith("!wiki "):
+      wikiName = message.content[6:]
+      await getWikiSummary(message, wikiName)
       return
 
     # if "!reminder" in message.content.lower():
@@ -361,6 +377,80 @@ async def eightball(message):
   except Exception as inst:
     return await fuckup(inst, message)
 
+async def getWikiSummary(message, title):
+  '''
+  Display the wikipedia article summary of the article with the given title
+
+  Parameters:
+    message  - discord.client.message object being responded to
+    title - string of the wikipedia article title
+  '''
+  try:
+    query = "https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&titles=" + title
+    wikiRequest = requests.get(query)
+    summaryObject = wikiRequest.json()
+
+    if list(summaryObject["query"]["pages"])[0] == "-1":
+      await message.channel.send("I'm sowwy, I couldn't find " + title + " on wikipedia pwq")
+      return 0
+
+    #Grab the wiki summary from the JSON object
+    #this line took forever to figure out
+    summary = list(summaryObject["query"]["pages"].values())[0]["extract"]
+
+    summary = trimTo2K(summary)
+
+
+    await message.channel.send(summary)
+
+    #Now for the fucking image
+    #if it got this far we know the article exists so no need to check for that
+    imageQuery = "https://en.wikipedia.org/w/api.php?action=query&titles=" + title + "&prop=pageimages&format=json&pithumbsize=200"
+    wikiImageRequest = requests.get(imageQuery)
+    imageSummaryObject = wikiImageRequest.json()
+
+    imageURLObject = list(imageSummaryObject["query"]["pages"].values())[0]
+
+    if "thumbnail" in imageURLObject.keys():
+      imageURL = imageURLObject["thumbnail"]["source"]
+      await message.channel.send(imageURL)
+
+    return 1
+
+    
+
+  except Exception as inst:
+    return await fuckup(inst, message)
+  
+
+
+
+async def displayHelp(message):
+  '''
+  Displays a list of user executable commands
+
+  Parameters:
+    message  - discord.client.message object being responded to
+  '''
+
+  helpMessage = '''
+  Heya! Here's what I can do for you atm uwu
+  
+  ohayo - wake me up owo
+  oyasumi - tuck me in o//w//o
+  !help - display all commands
+  !roll (or !dice/!die) #d## - roll dice
+  !flip - flip a coin
+  !ban @member - Ban somebody >:3
+  !pogchamp @member - Designate one as being a pog champ
+  !poll - create a poll
+  !wiki [article name] - get wikipedia summary of an article
+  '''
+
+  await message.channel.send(helpMessage)
+  return
+
+
 async def fuckup(inst, message):
   '''
   Outputs an error that was thrown during the execution of an asynchronous function
@@ -374,3 +464,19 @@ async def fuckup(inst, message):
   errorMsg = "Error " + str(type(inst)) + ": \n" + str(inst) + "\nLine: " + str(exc_tb.tb_lineno)
   await message.channel.send("```" + errorMsg + "```")
   return 0
+
+#The discord message limit is 2000 characters
+#This trims a message to the nearest sentence to 2000 characters
+def trimTo2K(message):
+
+  if (len(message) <= 2000):
+    return message
+
+  i=2000
+
+  while (i >= 0):
+    i -= 1
+    if (message[i] == "."):
+      break
+  
+  return message[:(i+1)]
