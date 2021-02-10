@@ -14,6 +14,9 @@ Discord Bot for those interested in Anime and Programming Memes (and also a bunc
 This bot has a variety of useful tools that you can call for fun, convenience or for acquiring general information (and will have much more functionality coming forward), but the main purpose of the bot is just to learn more about bot design, machine learning, popular APIs, and general programming techniques that will keep the contributors learning! 
 
 ## Installation
+
+<details>
+  <summary> <strong>Click to Expand</strong></summary>
 Currently in the process of being generalized. As of the current time, the best way to access Coderbot would be to:
 
 1. Fork this codebase 
@@ -24,8 +27,13 @@ Currently in the process of being generalized. As of the current time, the best 
 <em> However, That Sounds Like a Lot of Work! </em>
 
 We are working to streamline this! We will try to make this as least painful as possible moving forward, but for now, if you are interested in using the bot, and stuck on setting it up, let me know via email to yvillia-bot@gmail.com or in the discussions, and I will do my best to help you!
+</details>
 
 ## Repository Layout
+
+<details>
+  <summary> <strong>Click to Expand</strong></summary>
+ 
 - .github/ - Contains Workflow and Issue Templates
 - src/     - Contains Python Backend for Coderbot
     - bot.py - Classfile for Coderbot. Contains State Information and Discord Client Instance
@@ -45,8 +53,13 @@ We are working to streamline this! We will try to make this as least painful as 
 - .replit - If you want to code on Repl.it
 - Dockerfile - If you want to try to containerize Coderbot
 - Procfile - For Heroku Worker Dyno (also the commands for local execution)
+</details>
 
 ## Functionalities
+
+<details>
+  <summary> <strong>Click to Expand</strong></summary>
+ 
   Sample Functionalities:
   - !Poll - Produces Emote Reactions on Message for Suitible for Polls
   - !Flip or !Coin - Returns "Heads" or "Tails" on Request
@@ -59,12 +72,16 @@ We are working to streamline this! We will try to make this as least painful as 
   - !Kill - Emergency use kill switch will make her logout of discord and will require a server restart for her to come back (she shouldn't have any spamming
   
   For more documentation checkout the Wiki Pages (when they are finished!)
+</details>
 
 ## Contributors
   If you are interested in contributed to the codebase, just email me at yvillia-bot@gmail.com or contact me in some other way! Alway welcoming new people, Although the generality of Coderbot is still currently in the works, so it will be a little while before it is easy to incorporate her into another's server! 
   
 ## Future Functionalities/Ideas for Development
 
+<details>
+  <summary> <strong>Click to Expand</strong></summary>
+ 
 <!-- openIssueTable -->
 
 | Title                                                                                                                           |         Status          |                                                          Assignee                                                          | Body                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
@@ -87,8 +104,13 @@ We are working to streamline this! We will try to make this as least painful as 
 
 <!-- openIssueTable -->
 
+</details>
+
 ## Completed Functionalites and Issues
 
+<details>
+ <summary> <strong>Click to Expand</strong></summary>
+ 
 <!-- closedIssueTable -->
 
 | Title                                                                                                                                       |   Status   | Assignee | Body                                                                  |
@@ -99,5 +121,6 @@ We are working to streamline this! We will try to make this as least painful as 
 
 <!-- closedIssueTable -->
 
+</details>
 
 
