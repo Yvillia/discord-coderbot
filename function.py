@@ -137,6 +137,13 @@ async def dialogue_handler(myBot, message):
     elif "good bot" in message.content.lower():
       await good_bot(True, message)
 
+    #Magic 8ball.
+    if "!8ball" in message.content.lower():
+      await eightball(message)
+
+    if "!help" in message.content.lower():
+      await displayHelp(message)
+
     # Ban Commentary
     if "!ban" in message.content.lower() and len(message.mentions) == 0:
       await message.channel.send("Umumu, I see you have chosen... Banishment " + extract_names(message.author)[0] + "!! Bai Bai!")
@@ -314,6 +321,42 @@ async def good_bot(isGood, message):
       data['Phrases'][dataLog] += 1
       json.dump(data, stats)
       stats.close()
+    return 1
+  except Exception as inst:
+    return await fuckup(inst, message)
+
+async def eightball(message):
+  '''
+  Returns a prophecy based on the hard science of magic8ballism
+  
+  Parameters:
+    message - discord.client.message object being responded to
+
+  returns 1 upon successful execution
+  '''
+  try:
+    if (len(message.content) <= 7):
+      await message.channel.send("U gotta ask a question dummy!")
+      return
+
+    randNum= np.random.randint(1,6)
+
+    prophecy = ""
+
+    if (randNum == 1):
+      prophecy = "No x3c"
+    elif (randNum == 2):
+      prophecy = "I'm sowwy... I don't think so QwQ"
+    elif (randNum == 3):
+      prophecy = "Ya uwu"
+    elif (randNum == 4):
+      prophecy = "Most likely owo"
+    elif (randNum == 5):
+      prophecy = "I dunno nwn"
+    else:
+      prophecy = "Mayb, mayb not 83"
+
+    await message.channel.send(prophecy)
     return 1
   except Exception as inst:
     return await fuckup(inst, message)

@@ -14,30 +14,33 @@ intents = discord.Intents.default()
 intents.members = True
 
 # List of Discord IDs for Bot Channels
-#Real Channels, uncomment this before merging
-ID = {
-  'serverID': 625041679325462571,
-  'statusID': 625049807140159529,
-  'commentaryID': 801521814692954153,
-  'bottestID': 800872499507101697,
-  'archiveID': 801533100588269609,
-  'musicID': 801529894899154996,
-  'coderbotID': 800867858913165333,
-  'awwID': 802393034104242199,
-  'uiucID': 802393049459195914,
-  'dataisbeautifulID': 802393080417615882,
-  'learnprogrammingID': 802393170356600854,
-  'programmerhumorID': 802393191046840345,
-  'ffxivID': 802393280721584138
-}
+# #Real Channels, uncomment this before merging
+# # ID = {
+# #   'serverID': 625041679325462571,
+# #   'statusID': 625049807140159529,
+# #   'commentaryID': 801521814692954153,
+# #   'bottestID': 800872499507101697,
+# #   'archiveID': 801533100588269609,
+# #   'musicID': 801529894899154996,
+# #   'coderbotID': 800867858913165333,
+# #   'awwID': 802393034104242199,
+# #   'uiucID': 802393049459195914,
+# #   'dataisbeautifulID': 802393080417615882,
+# #   'learnprogrammingID': 802393170356600854,
+# #   'programmerhumorID': 802393191046840345,
+# #   'ffxivID': 802393280721584138
+# # }
 
-#Test Channels, comment this before merging
+# #Test Channels, comment this before merging
 # ID = {
 #   'serverID': 614887444591935498,
 #   'statusID': 614892196738498569,
 #   'commentaryID': 614887444591935584,
 #   'coderbotID': 337998244317495317
 # }
+
+with open("channelConfig.json") as channelConfigFile:
+  ID = json.load(channelConfigFile)
 
 REDDIT_ID = os.getenv('REDDIT_ID')
 REDDIT_SECRET = os.getenv('REDDIT_SECRET')
