@@ -2,6 +2,9 @@
 on: 
   issues:
     types: [labeled, unlabeled]
+  push:
+    branches: [main]
+  
     
 jobs:
   build:
