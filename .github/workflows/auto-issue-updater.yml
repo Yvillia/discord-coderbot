@@ -13,13 +13,13 @@ jobs:
     - name: Auto Issue List in README
       uses: seed-of-apricot/issue-list-readme@v1.1.0
       with:
-        GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
-        pattern: '<!-- openIssueTable -->'
-        labels: 'open'
+        GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+        pattern: "<!-- openIssueTable -->"
+        state: "open"
     - name: Completed Issue List
       uses: seed-of-apricot/issue-list-readme@v1.1.0
       with:
-        GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
-        pattern: '<!-- closedIssueTable -->'
-        labels: 'closed'
+        GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+        pattern: "<!-- closedIssueTable -->"
+        state: "closed"
   
