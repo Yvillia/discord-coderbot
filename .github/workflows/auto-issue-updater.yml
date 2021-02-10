@@ -1,0 +1,25 @@
+
+on: 
+  issues:
+    types: [labeled, unlabeled]
+    
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:   
+    - name: checkout
+      uses: actions/checkout@v2
+    - name: Auto Issue List in README
+      uses: seed-of-apricot/issue-list-readme@v1.1.0
+      with:
+        GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+        pattern: "<!-- openIssueTable -->"
+        state: "open"
+    - name: Completed Issue List
+      uses: seed-of-apricot/issue-list-readme@v1.1.0
+      with:
+        GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+        pattern: "<!-- closedIssueTable -->"
+        state: "closed"
+  
