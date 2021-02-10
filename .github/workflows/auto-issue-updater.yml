@@ -1,4 +1,4 @@
-
+# Credits to https://github.com/seed-of-apricot/issue-list-readme
 on: 
   issues:
     types: [labeled, unlabeled]
@@ -22,4 +22,15 @@ jobs:
         GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
         pattern: "<!-- closedIssueTable -->"
         state: "closed"
+        
+    - name: Add Updated Readme to Git
+      uses: EndBug/add-and-commit@v4
+      with:
+        message: README.md has been re-written
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Push Updates to Git
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
   
