@@ -150,7 +150,7 @@ async def on_ready():
 async def on_message(message):
   try:
     # Kill Switch
-    if "!kill" in message.content.lower():
+    if "!kill" in message.content.lower() and str(message.author) != "Mat#5553":
       await myBot.channels['status'].send("Process Killed: Sorry Guys :sob:!")
       await client.logout()
 
