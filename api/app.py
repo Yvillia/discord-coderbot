@@ -1,0 +1,110 @@
+from flask import Flask, jsonify, request
+from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
+
+# create app
+app = Flask(__name__)
+
+# make database a sqlite database for now. Use MySQL for production
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///site.db"
+
+# create db object
+db = SQLAlchemy(app)
+
+class Post(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(120), nullable=False)
+    fname = db.Column(db.String(60), nullable=False)
+    lname = db.Column(db.String(60), nullable=False)
+    msg = db.Column(db.Text, nullable=False)
+    pub_time = db.Column(db.DateTime, nullable=False, default=datetime.now())
+
+    def __repr__(self):
+        return "<Post %r" % self.email
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+
+    def __repr__(self):
+        return '<User %r>' % self.username
+
+
+@app.route('/')
+def index():
+    return jsonify({'msg': 'Hello World!'})
+
+
+@app.route('/adduser', methods=['GET', 'POST'])
+def adduser():
+    """Content type header must be application/json """
+    if request.method == 'GET':
+        return jsonify({'msg': 'Only POST requests allowed. See API reference'})
+    else: 
+        args = request.get_json()
+
+        if args is None:
+            return jsonify({'msg': 'No arguments provided'})
+        
+        username = args['username']
+        email = args['email']
+
+        if username and email:
+            user = User(username=username, email=email)
+            db.session.add(user)
+            db.session.commit()
+            return jsonify({'msg': 'user added'})
+        
+        return jsonify({'msg': 'No user added. Check the API'})
+
+@app.route('/getusers/')
+def getUsers():
+    usrs = User.query.all()
+    usr_list = []
+    for usr in usrs:
+        usr_list.append(usr.username)
+    return jsonify({'users': usr_list})
+
+@app.route('/getusername/')
+def getuser():
+    args = request.args
+    if 'email' in args:
+        email = args['email']
+        usr = User.query.filter_by(email=email).first()
+        return jsonify({'username': usr.username})
+    elif 'id' in args:
+        uid = args['id']
+        usr = User.query.filter_by(id=uid).first()
+        return jsonify({'username': usr.username})
+    else:
+        return jsonify({'msg': 'Please provide username parameter'})
+
+@app.route('/deluser', methods=['GET', 'POST'])
+def deluser():
+    """Content type header must be application/json """
+    if request.method == 'GET':
+        return jsonify({'msg': 'Only POST requests allowed. See API reference'})
+    else: 
+        args = request.get_json()
+
+        if args is None:
+            return jsonify({'msg': 'No arguments provided'})
+
+        if 'username' in args:
+            User.query.filter_by(username=args['username']).delete()
+            db.session.commit()
+            return jsonify({'msg': 'user deleted'})
+        elif 'email' in args:
+            User.query.filter_by(email=args['email']).delete()
+            db.session.commit()
+            return jsonify({'msg': 'user deleted'})
+        elif 'id' in args:
+            User.query.filter_by(email=args['id']).delete()
+            db.session.commit()
+            return jsonify({'msg': 'user deleted'})
+        
+        return jsonify({'msg': 'Unable to delete user'})
+
+if __name__ == '__main__':
+    app.run(debug=True)
