@@ -8,6 +8,16 @@ app = Flask(__name__)
 # make database a sqlite database for now. Use MySQL for production
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///site.db"
 
+"""
+To create SQLite db run the following in a python terminal
+cd /api
+python
+>>> from app import db
+>>> db.create_all()
+
+ref: https://flask-sqlalchemy.palletsprojects.com/en/2.x/quickstart/
+"""
+
 # create db object
 db = SQLAlchemy(app)
 
@@ -58,6 +68,7 @@ def adduser():
         
         return jsonify({'msg': 'No user added. Check the API'})
 
+
 @app.route('/getusers/')
 def getUsers():
     usrs = User.query.all()
@@ -80,6 +91,7 @@ def getuser():
     else:
         return jsonify({'msg': 'Please provide username parameter'})
 
+
 @app.route('/deluser', methods=['GET', 'POST'])
 def deluser():
     """Content type header must be application/json """
@@ -100,7 +112,7 @@ def deluser():
             db.session.commit()
             return jsonify({'msg': 'user deleted'})
         elif 'id' in args:
-            User.query.filter_by(email=args['id']).delete()
+            User.query.filter_by(id=args['id']).delete()
             db.session.commit()
             return jsonify({'msg': 'user deleted'})
         
