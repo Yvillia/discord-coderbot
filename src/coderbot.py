@@ -149,14 +149,14 @@ async def on_ready():
 @client.event
 async def on_message(message):
   try:
+    # If Bot Sends the Message Return !!! DO NOT REMOVE !!!
+    if message.author == client.user:
+      return
+    
     # Kill Switch
     if "!kill" in message.content.lower() and str(message.author) != "Mat#5553":
       await myBot.channels['status'].send("Process Killed: Sorry Guys :sob:!")
       await client.logout()
-
-    # If Bot Sends the Message Return !!! DO NOT REMOVE !!!
-    if message.author == client.user:
-      return
 
     pack = (myBot, message)
     # Allow Only Sleeping Protocols While Bot is Asleep
