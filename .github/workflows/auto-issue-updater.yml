@@ -1,16 +1,16 @@
 # Credits to https://github.com/seed-of-apricot/issue-list-readme
-on: 
+on:
   issues:
     types: [labeled, unlabeled]
   push:
     branches: [main]
-  
-    
+
+
 jobs:
   build:
     runs-on: ubuntu-latest
-    
-    steps:   
+
+    steps:
     - name: checkout
       uses: actions/checkout@v2
       with:
@@ -27,7 +27,7 @@ jobs:
         GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
         pattern: "<!-- closedIssueTable -->"
         state: "closed"
-        
+
     - name: Add Updated Readme to Git
       uses: EndBug/add-and-commit@v4
       with:
