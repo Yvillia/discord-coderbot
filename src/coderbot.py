@@ -154,9 +154,9 @@ async def on_message(message):
       return
     
     # Kill Switch
-    if "!kill" in message.content.lower() and str(message.author) != "Mat#5553":
-      await myBot.channels['status'].send("Process Killed: Sorry Guys :sob:!")
-      await client.logout()
+#     if "!kill" in message.content.lower() and str(message.author) != "Mat#5553":
+#       await myBot.channels['status'].send("Process Killed: Sorry Guys :sob:!")
+#       await client.logout()
 
     pack = (myBot, message)
     # Allow Only Sleeping Protocols While Bot is Asleep
