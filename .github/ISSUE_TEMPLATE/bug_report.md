@@ -7,7 +7,7 @@ assignees: ''
 
 ---
 
-### Summary of Bug: 
+### Summary of Bug:
 
 
 ### The below if for extra detail if you run out of description ideas!
