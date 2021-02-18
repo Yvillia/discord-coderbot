@@ -1,8 +1,9 @@
-from django.urls import path, include
+import hello.views
 from django.contrib import admin
+from django.urls import include, path
 
 admin.autodiscover()
-import hello.views
+
 
 # To add a new path, first import the app:
 # import blog

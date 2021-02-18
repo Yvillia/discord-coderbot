@@ -1,7 +1,8 @@
+import json
+
 import praw
 import requests
 import requests.auth
-import json
 
 
 class redditAPI:

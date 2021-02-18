@@ -1,15 +1,17 @@
-import discord
-from discord.ext import commands, tasks
-import os
-import sys
-from bot import Bot
-import function as f
 import asyncio
 import json
+import os
+import sys
 import threading
-from redditAPI import redditAPI
-from datetime import datetime, timedelta
 import time
+from datetime import datetime, timedelta
+
+import discord
+from discord.ext import commands, tasks
+
+import function as f
+from bot import Bot
+from redditAPI import redditAPI
 
 intents = discord.Intents.default()
 intents.members = True

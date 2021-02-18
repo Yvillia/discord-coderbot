@@ -2,9 +2,10 @@
 # to run HTTP API local`host server run the following in another terminal
 # python api/app.py
 
-import requests
-import pytest
 import json
+
+import pytest
+import requests
 
 server_url = "http://localhost:5000"
 

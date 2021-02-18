@@ -1,11 +1,11 @@
-import sys
-import numpy as np
-import discord
-import json
 import asyncio
+import json
+import sys
 import threading
-import requests
 
+import discord
+import numpy as np
+import requests
 
 # async def reminder(timer_len):
 
@@ -138,6 +138,116 @@ async def roll_dice(myBot, message):
     return 1
 
 
+async def ban(message):
+    if (
+        len(message.mentions) == 1
+        and "coderbot" == extract_names(message.mentions[0])[0].lower()
+    ):
+        if not message.author.top_role.name.lower() == "snail queen":
+            await message.channel.send(
+                "... Uhh, No thank you? Enjoy your new Username for a Little While Ya Lemon 🤬!"
+            )
+            og_name = str(message.author.name)
+            await message.author.edit(nick="Ye Ol' Tart " + og_name)
+            await asyncio.sleep(10)
+            await message.channel.send(
+                "Okay... Maybe that a was a bit far. I'm Sowwy 😔"
+            )
+            await message.author.edit(nick=og_name)
+        else:
+            await message.channel.send("Uuurgh, you are too powerful to be stopped!")
+        return
+
+    elif len(message.mentions) == 1:
+        member = message.mentions[0]
+        og_name = extract_names(member)[0]
+        if type(message.guild.get_member(member.id)) is not None:
+            await message.channel.send(
+                "OOPSIE WOOPSIE!! Uwu Did Someone make a fucky wucky!?! A wittle fucko boingo!? Better be more Cawreful! Enjoy the Nickname for a little while Ye Ol' Tart {0} ;3!".format(
+                    extract_names(member)[0]
+                )
+            )
+            if message.guild.get_member(member.id) is not None:
+                await message.guild.get_member(member.id).edit(
+                    nick="Ye Ol' Tart " + og_name
+                )
+                await asyncio.sleep(60)
+                await message.channel.send("Okay Ban-Time is Uppers :3")
+                await message.guild.get_member(member.id).edit(nick=og_name)
+
+        else:
+            await message.channel.send(
+                "Umm, Sorry technical difficulties! Are you shore that person exists :3?"
+            )
+        return
+
+    else:
+        editedStr = ""
+        for i, user in enumerate(message.mentions):
+            if extract_names(user)[0].lower() == "coderbot":
+                continue
+
+            if i != (len(message.mentions) - 1):
+                editedStr += str(extract_names(user)[0]) + ", "
+            else:
+                editedStr += "or " + str(extract_names(user)[0])
+
+        await message.channel.send(
+            "```Sigh... Okay, guess it's time to drop the ban-hammer. Whose wants this big ol' hammer first :3? {0}, UwU <3<3<3<3 ;3;3;3;3 ????```".format(
+                editedStr
+            )
+        )
+
+        for member in message.mentions:
+            if extract_names(member)[0].lower() == "coderbot":
+                continue
+
+            if (
+                message.guild.get_member(member.id) is not None
+                and not message.guild.get_member(member.id).top_role.name.lower()
+                == "snail queen"
+            ):
+                og_name = message.guild.get_member(member.id).name
+                await message.guild.get_member(member.id).edit(
+                    nick="Ye Ol' Tart " + og_name
+                )
+                await asyncio.sleep(60)
+                await message.channel.send("Okay, Ban Time Uppers :3")
+                await message.guild.get_member(member.id).edit(nick=og_name)
+
+
+async def pogchamp(message):
+    if (
+        len(message.mentions) == 1
+        and "coderbot" == extract_names(message.mentions[0])[0].lower()
+    ):
+        output = (
+            "... Umm, sure I guess I can be my own little Pogchamp, you bully! :sob:"
+        )
+
+    elif len(message.mentions) == 1:
+        output = '```System.out.println("Sigh... Okay, I guess you can be my little Pogchamp. {0}, Come here")```'.format(
+            extract_names(message.mentions[0])[0]
+        )
+
+    else:
+        editedStr = ""
+        for i, user in enumerate(message.mentions):
+            if extract_names(user)[0].lower() == "coderbot":
+                continue
+
+            if i != (len(message.mentions) - 1):
+                editedStr += str(extract_names(user)[0]) + ", "
+            else:
+                editedStr += "and " + str(extract_names(user)[0])
+        output = '```System.out.println("Sigh... Okay, I guess you can be my little Pogchamps. {0}, Come here")```'.format(
+            editedStr
+        )
+
+    # Output String is Built in the Conditionals Above and Sent
+    await message.channel.send(output)
+
+
 async def dialogue_handler(myBot, message):
     """
     Handles dialogue responses for bot
@@ -214,117 +324,14 @@ async def dialogue_handler(myBot, message):
                 await message.channel.send(
                     "STOP, I'LL NEVER BAN MY LITTLE POGCHAMPS!!! YOU CAN'T MAKE ME 😖!"
                 )
+                return
 
             elif "!ban" in message.content.lower():
-                if (
-                    len(message.mentions) == 1
-                    and "coderbot" == extract_names(message.mentions[0])[0].lower()
-                ):
-                    if not message.author.top_role.name.lower() == "snail queen":
-                        await message.channel.send(
-                            "... Uhh, No thank you? Enjoy your new Username for a Little While Ya Lemon 🤬!"
-                        )
-                        og_name = str(message.author.name)
-                        await message.author.edit(nick="Ye Ol' Tart " + og_name)
-                        await asyncio.sleep(10)
-                        await message.channel.send(
-                            "Okay... Maybe that a was a bit far. I'm Sowwy 😔"
-                        )
-                        await message.author.edit(nick=og_name)
-                    else:
-                        await message.channel.send(
-                            "Uuurgh, you are too powerful to be stopped!"
-                        )
-                    return
-
-                elif len(message.mentions) == 1:
-                    member = message.mentions[0]
-                    og_name = extract_names(member)[0]
-                    if type(message.guild.get_member(member.id)) != None:
-                        await message.channel.send(
-                            "OOPSIE WOOPSIE!! Uwu Did Someone make a fucky wucky!?! A wittle fucko boingo!? Better be more Cawreful! Enjoy the Nickname for a little while Ye Ol' Tart {0} ;3!".format(
-                                extract_names(member)[0]
-                            )
-                        )
-                        if message.guild.get_member(member.id) != None:
-                            await message.guild.get_member(member.id).edit(
-                                nick="Ye Ol' Tart " + og_name
-                            )
-                            await asyncio.sleep(60)
-                            await message.channel.send("Okay Ban-Time is Uppers :3")
-                            await message.guild.get_member(member.id).edit(nick=og_name)
-
-                    else:
-                        await message.channel.send(
-                            "Umm, Sorry technical difficulties! Are you shore that person exists :3?"
-                        )
-                    return
-
-                else:
-                    editedStr = ""
-                    for i, user in enumerate(message.mentions):
-                        if extract_names(user)[0].lower() == "coderbot":
-                            continue
-
-                        if i != (len(message.mentions) - 1):
-                            editedStr += str(extract_names(user)[0]) + ", "
-                        else:
-                            editedStr += "or " + str(extract_names(user)[0])
-
-                    await message.channel.send(
-                        "```Sigh... Okay, guess it's time to drop the ban-hammer. Whose wants this big ol' hammer first :3? {0}, UwU <3<3<3<3 ;3;3;3;3 ????```".format(
-                            editedStr
-                        )
-                    )
-
-                    for member in message.mentions:
-                        if extract_names(member)[0].lower() == "coderbot":
-                            continue
-
-                        if (
-                            message.guild.get_member(member.id) != None
-                            and not message.guild.get_member(
-                                member.id
-                            ).top_role.name.lower()
-                            == "snail queen"
-                        ):
-                            og_name = message.guild.get_member(member.id).name
-                            await message.guild.get_member(member.id).edit(
-                                nick="Ye Ol' Tart " + og_name
-                            )
-                            await asyncio.sleep(60)
-                            await message.channel.send("Okay, Ban Time Uppers :3")
-                            await message.guild.get_member(member.id).edit(nick=og_name)
-
+                await ban(message)
+                return
             elif "!pogchamp" in message.content.lower():
-                if (
-                    len(message.mentions) == 1
-                    and "coderbot" == extract_names(message.mentions[0])[0].lower()
-                ):
-                    output = "... Umm, sure I guess I can be my own little Pogchamp, you bully! :sob:"
-
-                elif len(message.mentions) == 1:
-                    output = '```System.out.println("Sigh... Okay, I guess you can be my little Pogchamp. {0}, Come here")```'.format(
-                        extract_names(message.mentions[0])[0]
-                    )
-
-                else:
-                    editedStr = ""
-                    for i, user in enumerate(message.mentions):
-                        if extract_names(user)[0].lower() == "coderbot":
-                            continue
-
-                        if i != (len(message.mentions) - 1):
-                            editedStr += str(extract_names(user)[0]) + ", "
-                        else:
-                            editedStr += "and " + str(extract_names(user)[0])
-                    output = '```System.out.println("Sigh... Okay, I guess you can be my little Pogchamps. {0}, Come here")```'.format(
-                        editedStr
-                    )
-
-                # Output String is Built in the Conditionals Above and Sent
-                await message.channel.send(output)
-
+                await pogchamp(message)
+                return
     except Exception as inst:
         return await fuckup(inst, message)
 
