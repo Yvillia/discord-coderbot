@@ -148,7 +148,12 @@ async def ban(message):
                 "... Uhh, No thank you? Enjoy your new Username for a Little While Ya Lemon 🤬!"
             )
             og_name = str(message.author.display_name)
-            await message.author.edit(nick="Ye Ol' Tart " + og_name)
+            if og_name is None:
+                og_name = message.author.name
+            if len(og_name) < 24:
+                await message.author.edit(nick="Ye Ol' Tart " + og_name)
+            else:
+                await message.author.edit(nick="Ye Ol' Lemon")
             await asyncio.sleep(10)
             await message.channel.send(
                 "Okay... Maybe that a was a bit far. I'm Sowwy 😔"
@@ -160,7 +165,13 @@ async def ban(message):
 
     elif len(message.mentions) == 1:
         member = message.mentions[0]
+        if member.author.top_role.name.lower() == "snail queen":
+            await message.channel.send(
+                "Urg!!! They are too powerful to ban!"
+            )
         og_name = member.nick #extract_names(member)[0]
+        if og_name is None:
+            og_name = member.name
         if type(message.guild.get_member(member.id)) is not None:
             await message.channel.send(
                 "OOPSIE WOOPSIE!! Uwu Did Someone make a fucky wucky!?! A wittle fucko boingo!? Better be more Cawreful! Enjoy the Nickname for a little while Ye Ol' Tart {0} ;3!".format(
@@ -168,9 +179,14 @@ async def ban(message):
                 )
             )
             if message.guild.get_member(member.id) is not None:
-                await message.guild.get_member(member.id).edit(
-                    nick="Ye Ol' Tart " + og_name
-                )
+                if len(og_name) < 24:
+                    await message.guild.get_member(member.id).edit(
+                        nick="Ye Ol' Tart " + og_name
+                    )
+                else:
+                    await message.guild.get_member(member.id).edit(
+                        nick="Ye Ol' Lemon"
+                    )
                 await asyncio.sleep(60)
                 await message.channel.send("Okay Ban-Time is Uppers :3")
                 await message.guild.get_member(member.id).edit(nick=og_name)
