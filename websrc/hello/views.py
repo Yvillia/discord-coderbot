@@ -1,10 +1,12 @@
-from django.shortcuts import render
-from django.http import HttpResponse
 from django.db import models
+from django.http import HttpResponse
+from django.shortcuts import render
+
 
 # Create your models here.
 class Greeting(models.Model):
     when = models.DateTimeField("date created", auto_now_add=True)
+
 
 # Create your views here.
 def index(request):

@@ -1,19 +1,19 @@
 name: Test Workflow
 
-on: 
+on:
   workflow_dispatch:
     inputs:
       logLevel:
-        description: 'Log level'     
+        description: 'Log level'
         required: true
         default: 'warning'
       tags:
-        description: 'Test scenario tags'  
+        description: 'Test scenario tags'
 
 
 jobs:
 
-  test: 
+  test:
 
       runs-on: ubuntu-latest
 
@@ -30,7 +30,7 @@ jobs:
         - name: Push
           run: |
             docker push ${{ secrets.DOCKER_USER }}/coderbot:${{ github.sha }}
-            docker push ${{ secrets.DOCKER_USER }}/coderbot:latest  
+            docker push ${{ secrets.DOCKER_USER }}/coderbot:latest
         - name: Test with pytest in Docker Container # Will need to Adjust later to add Heroku for testing
           run: |
             pytest -v test/test_api.py
