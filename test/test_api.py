@@ -10,6 +10,23 @@ import requests
 server_url = "http://localhost:5000"
 
 
+def test_ratebot():
+    headers = {"content-type": "application/json"}
+    data = {"user": "testuser", "rating": 1, "msg": "Hello World!"}
+    r = requests.post(server_url + "/ratebot/", headers=headers, data=json.dumps(data))
+    assert r.json() is not None
+    if r.json() is not None:
+        assert r.json()["msg"] == "Bot rated succesfully"
+
+
+def test_ratings():
+    r = requests.get(server_url + "/ratings/")
+    assert r.json() is not None
+    if r.json() is not None and "ratings" in r.json():
+        assert isinstance(r.json()["ratings"], list)
+
+
+## example pytests
 def test_connection():
     r = requests.get(server_url + "/")
     assert r.json()
