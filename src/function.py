@@ -165,7 +165,7 @@ async def ban(message):
 
     elif len(message.mentions) == 1:
         member = message.mentions[0]
-        if member.author.top_role.name.lower() == "snail queen":
+        if member.top_role.name.lower() == "snail queen":
             await message.channel.send(
                 "Urg!!! They are too powerful to ban!"
             )
