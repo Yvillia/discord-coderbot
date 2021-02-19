@@ -21,17 +21,7 @@ ref: https://flask-sqlalchemy.palletsprojects.com/en/2.x/quickstart/
 # create db object
 db = SQLAlchemy(app)
 
-class Post(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(120), nullable=False)
-    fname = db.Column(db.String(60), nullable=False)
-    lname = db.Column(db.String(60), nullable=False)
-    msg = db.Column(db.Text, nullable=False)
-    pub_time = db.Column(db.DateTime, nullable=False, default=datetime.now())
-
-    def __repr__(self):
-        return "<Post %r" % self.email
-
+## example user
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
@@ -40,11 +30,54 @@ class User(db.Model):
     def __repr__(self):
         return '<User %r>' % self.username
 
+class Rating(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user = db.Column(db.String(80), nullable=False)
+    rating = db.Column(db.Integer, nullable=False)
+    comment = db.Column(db.Text, nullable=True)
+
+    def __repr__(self):
+        return '<Rating %r>' % self.rating
+
+@app.route('/ratebot/', methods=['GET', 'POST'])
+def rate_bot():
+    if request.method == 'GET':
+        return jsonify({'msg': 'Only POST requests allowed. See API reference'})
+    else:
+        args = request.get_json()
+
+        if args is None:
+            return jsonify({'msg': 'No arguments provided'})
+        
+        rating = args['rating']
+        user = args['user']
+        msg = args['msg']
+
+        if rating and user and msg:
+            r = Rating(user=user, rating=rating, comment=msg)
+            db.session.add(r)
+            db.session.commit()
+            return jsonify({'msg': "Bot rated succesfully"})
+        else:
+            return jsonify({'msg': 'Not enough arguments'})
+
+    return jsonify({'msg', 'bot rated successfully'})
+
+
+@app.route('/ratings/')
+def getRatings():
+    ratings = Rating.query.all()
+    data = []
+    for rating in ratings:
+        data.append({'user': rating.user, 'msg': rating.comment, 'rating': rating.rating})
+    return jsonify({'ratings': data})
+
+
+## These are example routes
 
 @app.route('/')
 def index():
     return jsonify({'msg': 'Hello World!'})
-
 
 @app.route('/adduser', methods=['GET', 'POST'])
 def adduser():
