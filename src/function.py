@@ -147,7 +147,7 @@ async def ban(message):
             await message.channel.send(
                 "... Uhh, No thank you? Enjoy your new Username for a Little While Ya Lemon 🤬!"
             )
-            og_name = str(message.author.name)
+            og_name = str(message.author.display_name)
             await message.author.edit(nick="Ye Ol' Tart " + og_name)
             await asyncio.sleep(10)
             await message.channel.send(
@@ -160,7 +160,7 @@ async def ban(message):
 
     elif len(message.mentions) == 1:
         member = message.mentions[0]
-        og_name = extract_names(member)[0]
+        og_name = member.nick #extract_names(member)[0]
         if type(message.guild.get_member(member.id)) is not None:
             await message.channel.send(
                 "OOPSIE WOOPSIE!! Uwu Did Someone make a fucky wucky!?! A wittle fucko boingo!? Better be more Cawreful! Enjoy the Nickname for a little while Ye Ol' Tart {0} ;3!".format(
@@ -207,7 +207,7 @@ async def ban(message):
                 and not message.guild.get_member(member.id).top_role.name.lower()
                 == "snail queen"
             ):
-                og_name = message.guild.get_member(member.id).name
+                og_name = message.guild.get_member(member.id).nick
                 await message.guild.get_member(member.id).edit(
                     nick="Ye Ol' Tart " + og_name
                 )
