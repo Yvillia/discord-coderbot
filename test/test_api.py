@@ -1,16 +1,24 @@
-## Backend API must be running
-# to run HTTP API local`host server run the following in another terminal
-# python api/app.py
+"""
+To run please do the following:
+
+$ cd discord-coderbot/
+$ pytest -v test/test_api.py
+
+"""
 
 import pytest
 
 # pytest must be run from the main directory for this import to work
-from api.app import app
+from api.app import app, db
 
 
 @pytest.fixture(scope="module")
 def client():
-    return app.test_client()
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///pytest.db"
+    with app.app_context():
+        db.create_all()
+        yield app.test_client()
+        db.drop_all()
 
 
 def test_ratebot(client):
@@ -34,3 +42,4 @@ def test_ratings(client):
         assert "ratings" in r.json
         if "ratings" in r.json:
             assert isinstance(r.json["ratings"], list)
+            assert r.json["ratings"][0]["user"] == "testuser"
