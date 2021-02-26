@@ -254,7 +254,7 @@ async def evalMath(message, expression):
     output = ""
     try:
         preview(S(expression), viewer="file", filename="../imgs/output.png")
-        await message.channeld.send("Result: ", file=open("../imgs/output.png"))
+        await message.channel.send("Result: ", file=open("../imgs/output.png"))
     except Exception as e:
         output = f"""Idk what that means :/ so here's the error
         ```{e}```"""
