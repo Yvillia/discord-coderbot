@@ -10,8 +10,6 @@ import sympy
 from discord import File
 from PIL import Image
 from sympy import S, latex, preview
-from sympy.core.add import Add as symAdd
-from sympy.core.mul import Mul as symMul
 from sympy.core.numbers import Float as symFloat
 from sympy.core.numbers import Integer as symInt
 from sympy.parsing.latex import parse_latex
@@ -299,12 +297,7 @@ async def evalMath(message, expression, isLatex=False):
         else:
             msg = "Latex: `{}`".format(lx)
 
-        if (
-            isinstance(r, symInt)
-            or isinstance(r, symMul)
-            or isinstance(r, symFloat)
-            or isinstance(r, symAdd)
-        ):
+        if isinstance(r, symInt) or isinstance(r, symFloat):
             approx = r.evalf()
             msg = "{}\n`ans = {:.10f}`".format(msg, approx)
             await message.channel.send(msg, file=File("../imgs/output.png"))
