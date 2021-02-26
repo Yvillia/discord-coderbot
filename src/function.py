@@ -638,6 +638,9 @@ async def displayHelp(message):
   !pogchamp @member - Designate one as being a pog champ
   !poll - create a poll
   !wiki [article name] - get wikipedia summary of an article
+  !8ball [text] Answer controversial questions
+  !math [expression] Check out https://gamma.sympy.org/ for a list of commands
+  !matex [latex expresion] Do math in the latex format
   """
 
     await message.channel.send(helpMessage)
