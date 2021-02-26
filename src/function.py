@@ -332,6 +332,7 @@ async def dialogue_handler(myBot, message):
         if message.content.startswith("!math "):
             expression = message.content[6:]
             await evalMath(message, expression)
+            return
 
         # if "!reminder" in message.content.lower():
         #   threading.Thread(target=f.schedule_thread, args=(myBot,)).start()
