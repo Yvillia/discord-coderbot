@@ -267,10 +267,14 @@ async def pogchamp(message):
 async def evalMath(message, expression):
     output = ""
     try:
+        # take out backticks
+        if "`" in expression:
+            expression = expression.replace("`", "")
+
         preview(S(expression), viewer="file", filename="../imgs/output.png")
 
         # resize image
-        baseheight = 100
+        baseheight = 80
         img = Image.open("../imgs/output.png")
         hpercent = baseheight / float(img.size[1])
         wsize = int((float(img.size[0]) * float(hpercent)))
@@ -278,7 +282,10 @@ async def evalMath(message, expression):
         img.save("../imgs/output.png")
 
         # send Image
-        await message.channel.send("Result: ", file=File("../imgs/output.png"))
+        lx = latex(S(expression))
+        await message.channel.send(
+            "Latex: `{}`".format(lx), file=File("../imgs/output.png")
+        )
     except Exception as e:
         output = f"""Idk what that means :/ so here's the error
         ```{e}```"""
