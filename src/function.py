@@ -268,17 +268,21 @@ async def evalMath(message, expression):
     output = ""
     try:
         preview(S(expression), viewer="file", filename="../imgs/output.png")
-        baseheight = 560
+
+        # resize image
+        baseheight = 100
         img = Image.open("../imgs/output.png")
         hpercent = baseheight / float(img.size[1])
         wsize = int((float(img.size[0]) * float(hpercent)))
         img = img.resize((wsize, baseheight), Image.ANTIALIAS)
         img.save("../imgs/output.png")
+
+        # send Image
         await message.channel.send("Result: ", file=File("../imgs/output.png"))
     except Exception as e:
         output = f"""Idk what that means :/ so here's the error
         ```{e}```"""
-    await message.channel.send(output)
+        await message.channel.send(output)
 
 
 async def dialogue_handler(myBot, message):
