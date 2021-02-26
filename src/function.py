@@ -10,6 +10,9 @@ import sympy
 from discord import File
 from PIL import Image
 from sympy import S, latex, preview
+from sympy.core.numbers import Integer as symInt
+from sympy.parsing.latex import parse_latex
+from sympy.plotting.plot import Plot as symPlot
 
 # async def reminder(timer_len):
 
@@ -264,14 +267,19 @@ async def pogchamp(message):
     await message.channel.send(output)
 
 
-async def evalMath(message, expression):
+async def evalMath(message, expression, isLatex=False):
     output = ""
     try:
         # take out backticks
         if "`" in expression:
             expression = expression.replace("`", "")
 
-        preview(S(expression), viewer="file", filename="../imgs/output.png")
+        if isLatex:
+            r = S(parse_latex(expression))
+        else:
+            r = S(expression)
+
+        preview(r, viewer="file", filename="../imgs/output.png")
 
         # resize image
         baseheight = 80
@@ -282,10 +290,23 @@ async def evalMath(message, expression):
         img.save("../imgs/output.png")
 
         # send Image
-        lx = latex(S(expression))
-        await message.channel.send(
-            "Latex: `{}`".format(lx), file=File("../imgs/output.png")
-        )
+        lx = latex(r)
+
+        if isLatex:
+            msg = "Expression: `{}`".format(parse_latex(expression))
+        else:
+            msg = "Latex: `{}`".format(lx)
+
+        if isinstance(r, symInt):
+            approx = r.evalf()
+            msg = "{}\nans={:.10f}".format(msg, approx)
+        elif isinstance(r, symPlot):
+            r.save("../imgs/fig")
+            await message.channel.send(
+                msg, files=[File("../imgs/output.png"), File("../imgs/fig.png")]
+            )
+        await message.channel.send(msg, file=File("../imgs/output.png"))
+
     except Exception as e:
         output = f"""Idk what that means :/ so here's the error
         ```{e}```"""
@@ -346,6 +367,11 @@ async def dialogue_handler(myBot, message):
         if message.content.startswith("!math "):
             expression = message.content[6:]
             await evalMath(message, expression)
+            return
+
+        if message.content.startswith("!matex "):
+            expression = message.content[6:]
+            await evalMath(message, expression, isLatex=True)
             return
 
         # if "!reminder" in message.content.lower():
