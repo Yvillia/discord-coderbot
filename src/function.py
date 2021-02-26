@@ -640,7 +640,8 @@ async def displayHelp(message):
   !wiki [article name] - get wikipedia summary of an article
   !8ball [text] Answer controversial questions
   !math [expression] Check out https://gamma.sympy.org/ for a list of commands
-  !matex [latex expresion] Do math in the latex format
+  !matex [latex expresion] Do math in the latex format ^-^
+  [bad bot, good bot] - Rate me :)
   """
 
     await message.channel.send(helpMessage)
