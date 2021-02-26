@@ -8,6 +8,7 @@ import numpy as np
 import requests
 import sympy
 from discord import File
+from PIL import Image
 from sympy import S, latex, preview
 
 # async def reminder(timer_len):
@@ -169,10 +170,8 @@ async def ban(message):
     elif len(message.mentions) == 1:
         member = message.mentions[0]
         if member.top_role.name.lower() == "snail queen":
-            await message.channel.send(
-                "Urg!!! They are too powerful to ban!"
-            )
-        og_name = member.nick #extract_names(member)[0]
+            await message.channel.send("Urg!!! They are too powerful to ban!")
+        og_name = member.nick  # extract_names(member)[0]
         if og_name is None:
             og_name = member.name
         if type(message.guild.get_member(member.id)) is not None:
@@ -187,9 +186,7 @@ async def ban(message):
                         nick="Ye Ol' Tart " + og_name
                     )
                 else:
-                    await message.guild.get_member(member.id).edit(
-                        nick="Ye Ol' Lemon"
-                    )
+                    await message.guild.get_member(member.id).edit(nick="Ye Ol' Lemon")
                 await asyncio.sleep(60)
                 await message.channel.send("Okay Ban-Time is Uppers :3")
                 await message.guild.get_member(member.id).edit(nick=og_name)
@@ -271,6 +268,12 @@ async def evalMath(message, expression):
     output = ""
     try:
         preview(S(expression), viewer="file", filename="../imgs/output.png")
+        baseheight = 560
+        img = Image.open("../imgs/output.png")
+        hpercent = baseheight / float(img.size[1])
+        wsize = int((float(img.size[0]) * float(hpercent)))
+        img = img.resize((wsize, baseheight), Image.ANTIALIAS)
+        img.save("../imgs/output.png")
         await message.channel.send("Result: ", file=File("../imgs/output.png"))
     except Exception as e:
         output = f"""Idk what that means :/ so here's the error
