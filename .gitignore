@@ -130,3 +130,10 @@ dmypy.json
 
 # ignore sqlite db
 /api/site.db
+/api/pytest.db
+
+# ignore pem files
+*.pem
+
+# ignore imgs
+/imgs/*

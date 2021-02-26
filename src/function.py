@@ -6,6 +6,8 @@ import threading
 import discord
 import numpy as np
 import requests
+import sympy
+from sympy import S, latex, preview
 
 # async def reminder(timer_len):
 
@@ -264,6 +266,17 @@ async def pogchamp(message):
     await message.channel.send(output)
 
 
+async def evalMath(message, expression):
+    output = ""
+    try:
+        preview(S(expression), viewer="file", filename="../imgs/output.png")
+        await message.channeld.send("Result: ", file=open("../imgs/output.png"))
+    except Exception as e:
+        output = f"""Idk what that means :/ so here's the error
+        ```{e}```"""
+    await message.channel.send(output)
+
+
 async def dialogue_handler(myBot, message):
     """
     Handles dialogue responses for bot
@@ -314,6 +327,10 @@ async def dialogue_handler(myBot, message):
             wikiName = message.content[6:]
             await getWikiSummary(message, wikiName)
             return
+
+        if message.content.startswith("!math "):
+            expression = message.content[6:]
+            await evalMath(message, expression)
 
         # if "!reminder" in message.content.lower():
         #   threading.Thread(target=f.schedule_thread, args=(myBot,)).start()
