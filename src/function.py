@@ -302,6 +302,7 @@ async def evalMath(message, expression, isLatex=False):
         if isinstance(r, symInt) or isinstance(r, symMul) or isinstance(r, symFloat):
             approx = r.evalf()
             msg = "{}\nans={:.10f}".format(msg, approx)
+            await message.channel.send(msg, file=File("../imgs/output.png"))
         elif isinstance(r, symPlot):
             r.save("../imgs/fig")
             await message.channel.send(
