@@ -7,6 +7,7 @@ import discord
 import numpy as np
 import requests
 import sympy
+from discord import File
 from sympy import S, latex, preview
 
 # async def reminder(timer_len):
@@ -254,7 +255,7 @@ async def evalMath(message, expression):
     output = ""
     try:
         preview(S(expression), viewer="file", filename="../imgs/output.png")
-        await message.channel.send("Result: ", file=open("../imgs/output.png"))
+        await message.channel.send("Result: ", file=File("../imgs/output.png"))
     except Exception as e:
         output = f"""Idk what that means :/ so here's the error
         ```{e}```"""
