@@ -10,6 +10,7 @@ import sympy
 from discord import File
 from PIL import Image
 from sympy import S, latex, preview
+from sympy.core.add import Add as symAdd
 from sympy.core.mul import Mul as symMul
 from sympy.core.numbers import Float as symFloat
 from sympy.core.numbers import Integer as symInt
@@ -270,7 +271,6 @@ async def pogchamp(message):
 
 
 async def evalMath(message, expression, isLatex=False):
-    output = ""
     try:
         # take out backticks
         if "`" in expression:
@@ -299,9 +299,14 @@ async def evalMath(message, expression, isLatex=False):
         else:
             msg = "Latex: `{}`".format(lx)
 
-        if isinstance(r, symInt) or isinstance(r, symMul) or isinstance(r, symFloat):
+        if (
+            isinstance(r, symInt)
+            or isinstance(r, symMul)
+            or isinstance(r, symFloat)
+            or isinstance(r, symAdd)
+        ):
             approx = r.evalf()
-            msg = "{}\nans={:.10f}".format(msg, approx)
+            msg = "{}\n`ans = {:.10f}`".format(msg, approx)
             await message.channel.send(msg, file=File("../imgs/output.png"))
         elif isinstance(r, symPlot):
             r.save("../imgs/fig")
@@ -318,15 +323,13 @@ async def evalMath(message, expression, isLatex=False):
                 for i in new_nums:
                     list_msg = "{},{:.10f}".format(list_msg, i)
                 list_msg = list_msg[:-1] + "]"
-                msg = "{}\nans={}".format(msg, list_msg)
+                msg = "{}\n`ans = {}`".format(msg, list_msg)
             await message.channel.send(msg, file=File("../imgs/output.png"))
         else:
             await message.channel.send(msg, file=File("../imgs/output.png"))
 
-    except Exception as e:
-        output = f"""Idk what that means :/ so here's the error
-        ```{e}```"""
-        await message.channel.send(output)
+    except Exception as inst:
+        return await fuckup(inst, message)
 
 
 async def dialogue_handler(myBot, message):
