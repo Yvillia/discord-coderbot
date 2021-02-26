@@ -136,4 +136,4 @@ dmypy.json
 *.pem
 
 # ignore imgs
-/imgs/*
+/imgs/*.png
