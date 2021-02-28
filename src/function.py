@@ -8,7 +8,12 @@ import numpy as np
 import requests
 import sympy
 from discord import File
+from PIL import Image
 from sympy import S, latex, preview
+from sympy.core.numbers import Float as symFloat
+from sympy.core.numbers import Integer as symInt
+from sympy.parsing.latex import parse_latex
+from sympy.plotting.plot import Plot as symPlot
 
 # async def reminder(timer_len):
 
@@ -169,10 +174,8 @@ async def ban(message):
     elif len(message.mentions) == 1:
         member = message.mentions[0]
         if member.top_role.name.lower() == "snail queen":
-            await message.channel.send(
-                "Urg!!! They are too powerful to ban!"
-            )
-        og_name = member.nick #extract_names(member)[0]
+            await message.channel.send("Urg!!! They are too powerful to ban!")
+        og_name = member.nick  # extract_names(member)[0]
         if og_name is None:
             og_name = member.name
         if type(message.guild.get_member(member.id)) is not None:
@@ -187,9 +190,7 @@ async def ban(message):
                         nick="Ye Ol' Tart " + og_name
                     )
                 else:
-                    await message.guild.get_member(member.id).edit(
-                        nick="Ye Ol' Lemon"
-                    )
+                    await message.guild.get_member(member.id).edit(nick="Ye Ol' Lemon")
                 await asyncio.sleep(60)
                 await message.channel.send("Okay Ban-Time is Uppers :3")
                 await message.guild.get_member(member.id).edit(nick=og_name)
@@ -267,15 +268,61 @@ async def pogchamp(message):
     await message.channel.send(output)
 
 
-async def evalMath(message, expression):
-    output = ""
+async def evalMath(message, expression, isLatex=False):
     try:
-        preview(S(expression), viewer="file", filename="../imgs/output.png")
-        await message.channel.send("Result: ", file=File("../imgs/output.png"))
-    except Exception as e:
-        output = f"""Idk what that means :/ so here's the error
-        ```{e}```"""
-    await message.channel.send(output)
+        # take out backticks
+        if "`" in expression:
+            expression = expression.replace("`", "")
+
+        if isLatex:
+            r = S(parse_latex(expression))
+        else:
+            r = S(expression)
+
+        preview(r, viewer="file", filename="../imgs/output.png")
+
+        # resize image
+        baseheight = 80
+        img = Image.open("../imgs/output.png")
+        hpercent = baseheight / float(img.size[1])
+        wsize = int((float(img.size[0]) * float(hpercent)))
+        img = img.resize((wsize, baseheight), Image.ANTIALIAS)
+        img.save("../imgs/output.png")
+
+        # send Image
+        lx = latex(r)
+
+        if isLatex:
+            msg = "Expression: `{}`".format(parse_latex(expression))
+        else:
+            msg = "Latex: `{}`".format(lx)
+
+        if isinstance(r, symInt) or isinstance(r, symFloat):
+            approx = r.evalf()
+            msg = "{}\n`ans = {:.10f}`".format(msg, approx)
+            await message.channel.send(msg, file=File("../imgs/output.png"))
+        elif isinstance(r, symPlot):
+            r.save("../imgs/fig")
+            await message.channel.send(
+                msg, files=[File("../imgs/fig.png"), File("../imgs/output.png")]
+            )
+        elif isinstance(r, tuple) or isinstance(r, list):
+            new_nums = []
+            for i in r:
+                if isinstance(r, symInt):
+                    new_nums.append(r.evalf())
+            if len(new_nums) == len(r):
+                list_msg = "["
+                for i in new_nums:
+                    list_msg = "{},{:.10f}".format(list_msg, i)
+                list_msg = list_msg[:-1] + "]"
+                msg = "{}\n`ans = {}`".format(msg, list_msg)
+            await message.channel.send(msg, file=File("../imgs/output.png"))
+        else:
+            await message.channel.send(msg, file=File("../imgs/output.png"))
+
+    except Exception as inst:
+        return await fuckup(inst, message)
 
 
 async def dialogue_handler(myBot, message):
@@ -332,6 +379,11 @@ async def dialogue_handler(myBot, message):
         if message.content.startswith("!math "):
             expression = message.content[6:]
             await evalMath(message, expression)
+            return
+
+        if message.content.startswith("!matex "):
+            expression = message.content[6:]
+            await evalMath(message, expression, isLatex=True)
             return
 
         # if "!reminder" in message.content.lower():
@@ -586,6 +638,10 @@ async def displayHelp(message):
   !pogchamp @member - Designate one as being a pog champ
   !poll - create a poll
   !wiki [article name] - get wikipedia summary of an article
+  !8ball [text] Answer controversial questions
+  !math [expression] Check out https://gamma.sympy.org/ for a list of commands
+  !matex [latex expresion] Do math in the latex format ^-^
+  [bad bot, good bot] - Rate me :)
   """
 
     await message.channel.send(helpMessage)
