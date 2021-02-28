@@ -333,3 +333,5 @@ async def on_guild_role_update(before, after):
 
 if not os.getenv("TOKEN") is None:
     client.run(os.getenv("TOKEN"))
+else:
+    print("TOKEN environment variable not found")
