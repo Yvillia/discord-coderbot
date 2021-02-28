@@ -72,6 +72,7 @@ We are working to streamline this! We will try to make this as least painful as 
   - !Ban @mention ... - Not a Ban but a Punishment!
   - Sleep and Awake Protocols - If you find her to be annoying, simply tell her to sleep with "Oyasumi" and she won't answer commands until woken up with "Ohayo", you can see her current state under her profile in discord
   - Good Bot and Bad Bot, as well as list functionalities will be coming soon, along with a bunch of other features
+  - !wiki [article name] - get wikipedia summary of an article
   - !8ball [text] Answer controversial questions
   - !math [expression] Check out https://gamma.sympy.org/ for a list of commands
   - !matex [latex expresion] Do math in the latex format
