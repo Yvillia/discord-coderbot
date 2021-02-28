@@ -309,6 +309,10 @@ async def dialogue_handler(myBot, message):
             await eightball(message)
             return
 
+        if "!apiball" in message.content.lower():
+            await apiball(message)
+            return
+
         if "!help" in message.content.lower():
             await displayHelp(message)
             return
@@ -493,12 +497,47 @@ async def eightball(message):
 
         randNum = np.random.randint(1, 6)
 
+        prophecy = getEightBallMessage(randNum)
+
+        await message.channel.send(prophecy)
+        return 1
+    except Exception as inst:
+        return await fuckup(inst, message)
+
+async def apiball(message):
+    """
+    Super extra version of 8ball that gets its randomness from a true random number generator
+    Courtesy of random.org
+
+    Parameters:
+    message - discord.client.message object being responded to
+
+    returns 1 upon successful execution
+    """
+
+    try:
+        if len(message.content) <= 9:
+            await message.channel.send("U gotta ask a question dummy!")
+            return
+            
+        #Requests 1 random integer between 0-60 from random.org
+        randomNum = requests.get("https://www.random.org/integers/?num=1&min=0&max=60&col=1&base=10&format=plain&rnd=new")
+        randomNum = int(randomNum.text) % 6
+        
+        prophecy = getEightBallMessage(randomNum)
+
+        await message.channel.send(prophecy)
+        return 1
+    except Exception as inst:
+        return await fuckup(inst, message)
+
+def getEightBallMessage(randNum):
         prophecy = ""
 
         if randNum == 1:
             prophecy = "No x3c"
         elif randNum == 2:
-            prophecy = "I'm sowwy... I don't think so QwQ"
+            prophecy = "I don't think sooo >w<"
         elif randNum == 3:
             prophecy = "Ya uwu"
         elif randNum == 4:
@@ -506,12 +545,9 @@ async def eightball(message):
         elif randNum == 5:
             prophecy = "I dunno nwn"
         else:
-            prophecy = "Mayb, mayb not 83"
+            prophecy = "Mayb, mayb not :3"
 
-        await message.channel.send(prophecy)
-        return 1
-    except Exception as inst:
-        return await fuckup(inst, message)
+        return prophecy
 
 
 async def getWikiSummary(message, title):
