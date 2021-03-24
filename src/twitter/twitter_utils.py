@@ -58,3 +58,9 @@ def twitter_stock_updates(myBot):
     finally:
         print('Done.')
         myStream.disconnect()
+
+def twitter_update(myBot):
+    print('starting stream')
+    stream = RestockStreamListener(discord=myBot['stock-updates'].send, loop=asyncio.get_event_loop())
+    stream.filter(keywords = ['ps5 restock', 'ps5 disc', 'ps5 digital', '[DROP]', 'ps5 bundle', 'xbox bundle'])
+    print('ending stream')
