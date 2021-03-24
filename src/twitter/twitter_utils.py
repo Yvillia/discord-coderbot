@@ -49,8 +49,8 @@ async def twitter_stock_updates(myBot):
         # start stream
         myStream = tweepy.Stream(auth = api.auth, listener=RestockStreamListener(callback=send_msg(myBot)))
         print('Start streaming.')
-        await myStream.filter(track=keywords, is_async=True, follow=users)
-    except KeyboardInterrupt as e :
+        await myStream.filter(track=keywords, is_async=True)
+    except Exception as e :
         print("Stopped.")
     finally:
         print('Done.')
