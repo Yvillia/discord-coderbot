@@ -12,7 +12,7 @@ from discord.ext import commands, tasks
 import function as f
 from bot import Bot
 from redditAPI import redditAPI
-from twitter.twitter_uitls import twitter_stock_updates
+from twitter.twitter_utils import twitter_stock_updates
 
 intents = discord.Intents.default()
 intents.members = True

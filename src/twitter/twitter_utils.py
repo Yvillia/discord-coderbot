@@ -1,8 +1,12 @@
 import tweepy
 import yaml
 import json
+import os
 
-config = yaml.load(open('config.yml' ,'r'), Loader=yaml.Loader)
+dir_path = os.path.join(os.path.realpath(__file__), '..')
+file_path = os.path.join(dir_path, 'config.yml')
+
+config = yaml.load(open(file_path ,'r'), Loader=yaml.Loader)
 auth = tweepy.OAuthHandler(config['api_key'], config['api_secret_key'])
 auth.set_access_token(config['access_token'], config['access_secret_token'])
 
