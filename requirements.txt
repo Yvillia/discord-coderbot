@@ -1,8 +1,5 @@
 aiohttp==3.7.4
 alabaster==0.7.12
-anaconda-client==1.7.2
-anaconda-navigator==1.10.0
-anaconda-project==0.8.3
 antlr4-python3-runtime==4.9.1
 appdirs==1.4.4
 argh==0.26.2
@@ -40,10 +37,6 @@ cloudpickle @ file:///tmp/build/80754af9/cloudpickle_1598884132938/work
 clyent==1.2.2
 colorama @ file:///tmp/build/80754af9/colorama_1603211150991/work
 comtypes==1.1.7
-conda==4.9.2
-conda-build==3.20.5
-conda-package-handling @ file:///C:/ci/conda-package-handling_1603003327818/work
-conda-verify==3.4.2
 contextlib2==0.6.0.post1
 cryptography @ file:///C:/ci/cryptography_1601046905460/work
 cycler==0.10.0
