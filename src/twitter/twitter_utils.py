@@ -3,6 +3,7 @@ import yaml
 import json
 import os
 import traceback
+import asyncio
 
 file_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'config.yml')
 
@@ -21,25 +22,21 @@ except:
 # api.update_status('Test Tweet from Python')
 
 class RestockStreamListener(tweepy.StreamListener):
-    def __init__(self, callback):
-        super().__init__()
-        self.callback = callback
+    def __init__(self, discord, loop, args*, kwargs**):
+        super().__init__(args*, kwargs**)
+        self.discord = discord
+        self.loop = loop
 
     def on_data(self, data):
-        self.callback(data)
+        tweet = json.loads(data)
+        link = f"http://twitter.com/{tweet['user']['screen_name']}/status/{tweet['id']}"
+        future = asyncio.run_coroutine_threadsafe(self.discord(msg), self.loop)
+        future.result()
+        print(link)
 
     def on_error(self, status_code):
         print(f'ERROR. Status Code: {status_code}')
         return False
-
-# create a wrapper function so that bot can send message. 
-def send_msg(myBot):
-    async def wrapper(data):
-        tweet = json.loads(data)
-        link = f"http://twitter.com/{tweet['user']['screen_name']}/status/{tweet['id']}"
-        await myBot.channels["stock-updates"].send(link)
-
-    return wrapper
 
 # create async method for twitter updates
 def twitter_stock_updates(myBot):

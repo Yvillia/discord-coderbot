@@ -12,7 +12,7 @@ from discord.ext import commands, tasks
 import function as f
 from bot import Bot
 from redditAPI import redditAPI
-from twitter.twitter_utils import twitter_stock_updates
+from twitter.twitter_utils import RestockStreamListener
 
 intents = discord.Intents.default()
 intents.members = True
@@ -133,7 +133,9 @@ async def on_ready():
         threading.Thread(target=f.schedule_thread, args=(myBot,)).start()
 
         # Start up twitter bot
-        threading.Thread(target=twitter_stock_updates, args=(myBot,)).start()
+        stream = RestockStreamListener(discord=myBot['stock-updates'].send, loop=asyncio.get_event_loop())
+
+        stream.filter(keywords = ['ps5 restock', 'ps5 disc', 'ps5 digital', '[DROP]', 'ps5 bundle', 'xbox bundle'], is_asyc=True)
 
         # Update Asynchronous Information After Client Login
         myBot.updateInformation(channels, epicGuild, coderBot)
