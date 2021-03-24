@@ -34,10 +34,10 @@ class RestockStreamListener(tweepy.StreamListener):
 
 # create a wrapper function so that bot can send message. 
 def send_msg(myBot):
-    def wrapper(data):
+    async def wrapper(data):
         tweet = json.loads(data)
         link = f"http://twitter.com/{tweet['user']['screen_name']}/status/{tweet['id']}"
-        myBot.channels['stock-updates'].send_message(link)
+        await myBot.channels["stock-updates"].send(link)
 
     return wrapper
 
