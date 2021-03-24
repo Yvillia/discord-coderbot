@@ -41,7 +41,7 @@ def send_msg(myBot):
     return wrapper
 
 # create async method for twitter updates
-async def twitter_stock_updates(myBot):
+def twitter_stock_updates(myBot):
     try:
         # get users the twitter account follows
         users = [str(i) for i in api.friends_ids('coderbott')]
@@ -52,7 +52,7 @@ async def twitter_stock_updates(myBot):
         # start stream
         myStream = tweepy.Stream(auth = api.auth, listener=RestockStreamListener(callback=send_msg(myBot)))
         print('Start streaming.')
-        await myStream.filter(track=keywords, is_async=True)
+        myStream.filter(track=keywords)
     except Exception as e :
         print("Stopped.")
     finally:
