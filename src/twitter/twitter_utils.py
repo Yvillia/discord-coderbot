@@ -2,6 +2,7 @@ import tweepy
 import yaml
 import json
 import os
+import traceback
 
 file_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'config.yml')
 
@@ -55,6 +56,7 @@ def twitter_stock_updates(myBot):
         myStream.filter(track=keywords)
     except Exception as e:
         print(e)
+        traceback.print_exc()
         print("Stopped.")
     finally:
         print('Done.')
