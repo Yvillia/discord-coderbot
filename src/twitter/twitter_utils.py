@@ -22,45 +22,42 @@ except:
 # api.update_status('Test Tweet from Python')
 
 class RestockStreamListener(tweepy.StreamListener):
-    def __init__(self, discord, loop, *args, **kwargs):
+    def __init__(self, bot, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.discord = discord
-        self.loop = loop
+        self.bot = bot
 
     def on_data(self, data):
         tweet = json.loads(data)
         link = f"http://twitter.com/{tweet['user']['screen_name']}/status/{tweet['id']}"
-        future = asyncio.run_coroutine_threadsafe(self.discord(msg), self.loop)
-        future.result()
-        print(link)
+        self.bot.links.append(link)
 
     def on_error(self, status_code):
         print(f'ERROR. Status Code: {status_code}')
         return False
 
-# create async method for twitter updates
-def twitter_stock_updates(myBot):
-    try:
-        # get users the twitter account follows
-        users = [str(i) for i in api.friends_ids('coderbott')]
+# # create async method for twitter updates
+# def twitter_stock_updates(myBot):
+#     try:
+#         # get users the twitter account follows
+#         users = [str(i) for i in api.friends_ids('coderbott')]
 
-        # keywords for finding stock
-        keywords = ['ps5 restock', 'ps5 disc', 'ps5 digital', '[DROP]', 'ps5 bundle', 'xbox bundle']
+#         # keywords for finding stock
+#         keywords = ['ps5 restock', 'ps5 disc', 'ps5 digital', '[DROP]', 'ps5 bundle', 'xbox bundle']
 
-        # start stream
-        myStream = tweepy.Stream(auth = api.auth, listener=RestockStreamListener(callback=send_msg(myBot)))
-        print('Start streaming.')
-        myStream.filter(track=keywords)
-    except Exception as e:
-        print(e)
-        traceback.print_exc()
-        print("Stopped.")
-    finally:
-        print('Done.')
-        myStream.disconnect()
+#         # start stream
+#         myStream = tweepy.Stream(auth = api.auth, listener=RestockStreamListener(callback=send_msg(myBot)))
+#         print('Start streaming.')
+#         myStream.filter(track=keywords)
+#     except Exception as e:
+#         print(e)
+#         traceback.print_exc()
+#         print("Stopped.")
+#     finally:
+#         print('Done.')
+#         myStream.disconnect()
 
 def twitter_update(myBot):
     print('starting stream')
-    stream = RestockStreamListener(discord=myBot['stock-updates'].send, loop=asyncio.get_event_loop())
+    stream = RestockStreamListener(bot=myBot)
     stream.filter(keywords = ['ps5 restock', 'ps5 disc', 'ps5 digital', '[DROP]', 'ps5 bundle', 'xbox bundle'])
     print('ending stream')

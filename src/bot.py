@@ -11,6 +11,7 @@ class Bot:
         self.client = client_in
         self.asleep = True
         self.IDs = ids
+        self.tweets = []
 
     async def oyasumi(self):
         sleeping = discord.Game("State: Asleep")
