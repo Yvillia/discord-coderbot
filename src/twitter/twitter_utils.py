@@ -25,9 +25,11 @@ class RestockStreamListener(tweepy.StreamListener):
     def __init__(self, bot, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.bot = bot
+        print('init Stream listener')
 
     def on_data(self, data):
         tweet = json.loads(data)
+        print(link)
         link = f"http://twitter.com/{tweet['user']['screen_name']}/status/{tweet['id']}"
         self.bot.links.append(link)
 
