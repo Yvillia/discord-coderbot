@@ -132,13 +132,13 @@ async def on_ready():
         # Creating Status Reporting Thread
         threading.Thread(target=f.schedule_thread, args=(myBot,)).start()
 
+        # Update Asynchronous Information After Client Login
+        myBot.updateInformation(channels, epicGuild, coderBot)
+
         # Start up twitter bot
         stream = RestockStreamListener(discord=myBot['stock-updates'].send, loop=asyncio.get_event_loop())
 
         stream.filter(keywords = ['ps5 restock', 'ps5 disc', 'ps5 digital', '[DROP]', 'ps5 bundle', 'xbox bundle'], is_asyc=True)
-
-        # Update Asynchronous Information After Client Login
-        myBot.updateInformation(channels, epicGuild, coderBot)
 
         # Success and Bot Starts Up in Sleep State
         print("\n Logged in as: {0.user}\n".format(client))

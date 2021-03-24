@@ -22,8 +22,8 @@ except:
 # api.update_status('Test Tweet from Python')
 
 class RestockStreamListener(tweepy.StreamListener):
-    def __init__(self, discord, loop, args*, kwargs**):
-        super().__init__(args*, kwargs**)
+    def __init__(self, discord, loop, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.discord = discord
         self.loop = loop
 
