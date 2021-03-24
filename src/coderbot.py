@@ -122,7 +122,7 @@ async def check_tweets():
     print(keys)
     for key in keys:
         link = r.get(key.decode())
-        myBot.channels['stock-updates'].send(link.decode())
+        await myBot.channels['stock-updates'].send(link.decode())
         r.delete(key.decode())
 
 @client.event

@@ -5,6 +5,7 @@ import os
 import traceback
 import asyncio
 import redis
+from urllib3.exceptions import ProtocolError
 
 file_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'config.yml')
 
@@ -44,7 +45,11 @@ def twitter_update(myBot):
     print('starting stream')
     users = [str(i) for i in api.friends_ids('coderbott')]
     stream = tweepy.Stream(auth = api.auth, listener=RestockStreamListener(bot=myBot))
-    stream.filter(track = ['ps5 restock', 'ps5 disc', 'ps5 digital', '[DROP]', 'ps5 bundle', 'xbox bundle'])
+    while True:
+        try: 
+            stream.filter(track = ['ps5 restock', 'ps5 disc', 'ps5 digital', '[DROP]', 'ps5 bundle', 'xbox bundle'], follow=users)
+        except (ProtocolError, ArithmeticError):
+            continue
     print('ending stream')
 
 
