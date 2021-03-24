@@ -5,6 +5,7 @@ import sys
 import threading
 import time
 from datetime import datetime, timedelta
+import redis
 
 import discord
 from discord.ext import commands, tasks
@@ -77,6 +78,9 @@ asleep = discord.Game("State: Asleep")
 # Bot Class Intialization
 myBot = Bot(client, ID)
 
+# redis
+r = redis.Redis(host='localhost', port=6379, db=0)
+
 # task_manager = commands.Bot(command_prefix="!", intents=intents)
 
 
@@ -113,8 +117,12 @@ async def send_message():
 
 @tasks.loop(seconds=15)
 async def check_tweets():
-    while len(myBot.tweets) != 0:
-        myBot.channels['stock-updates'].send(myBot.tweets.pop())
+    keys = r.keys('*link*')
+    print(keys)
+    for key in keys:
+        link = r.get(key.decode())
+        myBot.channels['stock-updates'].send(link.decode())
+        r.delete(key.decode())
 
 @client.event
 async def on_ready():

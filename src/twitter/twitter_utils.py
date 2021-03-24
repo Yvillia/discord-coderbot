@@ -34,7 +34,7 @@ class RestockStreamListener(tweepy.StreamListener):
         tweet = json.loads(data)
         link = f"http://twitter.com/{tweet['user']['screen_name']}/status/{tweet['id']}"
         print(link)
-        r.set(f'link:{tweet['id']}', link)
+        r.set(f"link:{tweet['id']}"", link)
 
     def on_error(self, status_code):
         print(f'ERROR. Status Code: {status_code}')
@@ -44,7 +44,7 @@ def twitter_update(myBot):
     print('starting stream')
     users = [str(i) for i in api.friends_ids('coderbott')]
     stream = tweepy.Stream(auth = api.auth, listener=RestockStreamListener(bot=myBot))
-    stream.filter(track = ['ps5 restock', 'ps5 disc', 'ps5 digital', '[DROP]', 'ps5 bundle', 'xbox bundle', 'trump'])
+    stream.filter(track = ['ps5 restock', 'ps5 disc', 'ps5 digital', '[DROP]', 'ps5 bundle', 'xbox bundle'])
     print('ending stream')
 
 
