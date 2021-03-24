@@ -41,7 +41,7 @@ def twitter_update(myBot):
     print('starting stream')
     users = [str(i) for i in api.friends_ids('coderbott')]
     stream = tweepy.Stream(auth = api.auth, listener=RestockStreamListener(bot=myBot))
-    stream.filter(track = ['ps5 restock', 'ps5 disc', 'ps5 digital', '[DROP]', 'ps5 bundle', 'xbox bundle'])
+    stream.filter(track = ['ps5 restock', 'ps5 disc', 'ps5 digital', '[DROP]', 'ps5 bundle', 'xbox bundle', 'trump'])
     print('ending stream')
 
 

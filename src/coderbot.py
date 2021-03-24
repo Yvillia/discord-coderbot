@@ -12,8 +12,7 @@ from discord.ext import commands, tasks
 import function as f
 from bot import Bot
 from redditAPI import redditAPI
-from twitter.twitter_utils import RestockStreamListener
-
+from twitter.twitter_utils import twitter_update
 intents = discord.Intents.default()
 intents.members = True
 
@@ -140,9 +139,7 @@ async def on_ready():
         myBot.updateInformation(channels, epicGuild, coderBot)
 
         # Start up twitter bot
-        stream = RestockStreamListener(bot=myBot)
-        keywords = ['ps5 restock', 'ps5 disc', 'ps5 digital', '[DROP]', 'ps5 bundle', 'xbox bundle']
-        threading.Thread(target=stream.filter, args=(keywords,)).start()
+        threading.Thread(target=twitter_update, args=(myBot,)).start()
 
         # Success and Bot Starts Up in Sleep State
         print("\n Logged in as: {0.user}\n".format(client))
