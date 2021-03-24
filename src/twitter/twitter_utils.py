@@ -4,6 +4,7 @@ import json
 import os
 import traceback
 import asyncio
+import redis
 
 file_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'config.yml')
 
@@ -12,6 +13,8 @@ auth = tweepy.OAuthHandler(config['api_key'], config['api_secret_key'])
 auth.set_access_token(config['access_token'], config['access_secret_token'])
 
 api = tweepy.API(auth)
+
+r = redis.Redis(host='localhost', port=6379, db=0)
 
 try:
     api.verify_credentials()
@@ -31,7 +34,7 @@ class RestockStreamListener(tweepy.StreamListener):
         tweet = json.loads(data)
         link = f"http://twitter.com/{tweet['user']['screen_name']}/status/{tweet['id']}"
         print(link)
-        self.bot.tweets.append(link)
+        r.set(f'link:{tweet['id']}', link)
 
     def on_error(self, status_code):
         print(f'ERROR. Status Code: {status_code}')
