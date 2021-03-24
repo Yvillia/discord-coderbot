@@ -133,7 +133,7 @@ async def on_ready():
         threading.Thread(target=f.schedule_thread, args=(myBot,)).start()
 
         # Start up twitter bot
-        twitter_stock_updates(myBot)
+        threading.Thread(target=twitter_stock_updates, args=(myBot,)).start()
 
         # Update Asynchronous Information After Client Login
         myBot.updateInformation(channels, epicGuild, coderBot)

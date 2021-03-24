@@ -53,7 +53,8 @@ def twitter_stock_updates(myBot):
         myStream = tweepy.Stream(auth = api.auth, listener=RestockStreamListener(callback=send_msg(myBot)))
         print('Start streaming.')
         myStream.filter(track=keywords)
-    except Exception as e :
+    except Exception as e:
+        print(e)
         print("Stopped.")
     finally:
         print('Done.')
