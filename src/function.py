@@ -1,7 +1,6 @@
 import asyncio
 import json
 import sys
-import threading
 
 import discord
 import numpy as np
@@ -721,3 +720,6 @@ def trimTo2K(message):
             break
 
     return message[: (i + 1)]
+
+
+# twitter init function

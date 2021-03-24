@@ -12,6 +12,7 @@ from discord.ext import commands, tasks
 import function as f
 from bot import Bot
 from redditAPI import redditAPI
+from twitter_utils import twitter_stock_updates
 
 intents = discord.Intents.default()
 intents.members = True
@@ -130,6 +131,9 @@ async def on_ready():
 
         # Creating Status Reporting Thread
         threading.Thread(target=f.schedule_thread, args=(myBot,)).start()
+
+        # Start up bot
+        await twitter_stock_updates(myBot=myBot)
 
         # Update Asynchronous Information After Client Login
         myBot.updateInformation(channels, epicGuild, coderBot)

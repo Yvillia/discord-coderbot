@@ -137,3 +137,6 @@ dmypy.json
 
 # ignore imgs
 /imgs/*.png
+
+# ignore twitter config
+src/twitter/config.yml
