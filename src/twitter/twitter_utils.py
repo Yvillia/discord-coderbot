@@ -34,7 +34,7 @@ class RestockStreamListener(tweepy.StreamListener):
         tweet = json.loads(data)
         link = f"http://twitter.com/{tweet['user']['screen_name']}/status/{tweet['id']}"
         print(link)
-        r.set(f"link:{tweet['id']}"", link)
+        r.set(f"link:{tweet['id']}", link)
 
     def on_error(self, status_code):
         print(f'ERROR. Status Code: {status_code}')

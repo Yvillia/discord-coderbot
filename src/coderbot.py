@@ -117,6 +117,7 @@ async def send_message():
 
 @tasks.loop(seconds=15)
 async def check_tweets():
+    print('checking tweets')
     keys = r.keys('*link*')
     print(keys)
     for key in keys:
