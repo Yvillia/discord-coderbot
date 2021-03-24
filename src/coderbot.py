@@ -115,7 +115,7 @@ async def send_message():
     if myBot.status != "":
         await myBot.channels["status"].send(myBot.status)
 
-@tasks.loop(seconds=15)
+@tasks.loop(seconds=15.0)
 async def check_tweets():
     print('checking tweets')
     keys = r.keys('*link*')
@@ -148,7 +148,9 @@ async def on_ready():
         myBot.updateInformation(channels, epicGuild, coderBot)
 
         # Start up twitter bot
+        print('starting')
         threading.Thread(target=twitter_update, args=(myBot,)).start()
+        print('ending')
 
         # Success and Bot Starts Up in Sleep State
         print("\n Logged in as: {0.user}\n".format(client))
@@ -164,6 +166,9 @@ async def on_ready():
 
         # Status Update Task Begin
         send_message.start()
+
+        # start reading tweets
+        check_tweets.start()
 
     except Exception as inst:
         _, _, exc_tb = sys.exc_info()
