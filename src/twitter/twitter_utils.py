@@ -3,8 +3,7 @@ import yaml
 import json
 import os
 
-dir_path = os.path.join(os.path.realpath(__file__), '..')
-file_path = os.path.join(dir_path, 'config.yml')
+file_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'config.yml')
 
 config = yaml.load(open(file_path ,'r'), Loader=yaml.Loader)
 auth = tweepy.OAuthHandler(config['api_key'], config['api_secret_key'])
