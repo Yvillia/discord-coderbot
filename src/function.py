@@ -342,6 +342,9 @@ async def dialogue_handler(myBot, message):
         if message.author == "CoderBot#9778":
             return
 
+        if "69" in message.content.lower():
+            await message.channel.send("Nice")
+
         # Bad Bot and Good Bot Messages With Live Updates to Statistics.json
         if "bad bot" in message.content.lower():
             await good_bot(False, message)
