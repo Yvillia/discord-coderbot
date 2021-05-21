@@ -142,7 +142,7 @@ async def on_ready():
             channels.update({name[:-2]: epicGuild.get_channel(id)})
 
         # Creating Status Reporting Thread
-        threading.Thread(target=f.schedule_thread, args=(myBot,)).start()
+        threading.Thread(target=f.schedule_thread, args=()).start()
 
         # Update Asynchronous Information After Client Login
         myBot.updateInformation(channels, epicGuild, coderBot)
