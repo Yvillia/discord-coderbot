@@ -149,7 +149,7 @@ async def on_ready():
 
         # Start up twitter bot
         print('starting')
-        threading.Thread(target=twitter_update, args=(myBot,)).start()
+        threading.Thread(target=twitter_update, args=()).start()
         print('ending')
 
         # Success and Bot Starts Up in Sleep State
