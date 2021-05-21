@@ -57,11 +57,11 @@ class RestockStreamListener(tweepy.StreamListener):
         print(f'ERROR. Status Code: {status_code}')
         return False
     
-def twitter_update(myBot):
+def twitter_update():
     print('starting stream')
     while True:
         try:
-            _twitter_update(myBot)
+            _twitter_update()
         except KeyboardInterrupt:
             sys.exit(0)
         except Exception as e:
