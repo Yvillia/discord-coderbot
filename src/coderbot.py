@@ -117,9 +117,9 @@ async def send_message():
 
 @tasks.loop(seconds=15.0)
 async def check_tweets():
-    print('checking tweets')
+    # print('checking tweets')
     keys = r.keys('*link*')
-    print(keys)
+    # print(keys)
     for key in keys:
         link = r.get(key.decode())
         await myBot.channels['stock-updates'].send(link.decode())

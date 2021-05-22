@@ -3,7 +3,7 @@ import yaml
 import json
 import os
 import sys
-# import redis
+import redis
 from urllib3.exceptions import ProtocolError
 
 file_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'config.yml')
@@ -20,7 +20,7 @@ auth.set_access_token(config['access_token'], config['access_secret_token'])
 
 api = tweepy.API(auth)
 
-# r = redis.Redis(host='localhost', port=6379, db=0)
+r = redis.Redis(host='localhost', port=6379, db=0)
 
 try:
     api.verify_credentials()
@@ -34,13 +34,13 @@ class RestockStreamListener(tweepy.StreamListener):
     def __init__(self, users, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.users = users
-        print('init Stream listener')
+        # print('init Stream listener')
 
     def on_data(self, data):
         tweet = json.loads(data)
 
-        if tweet['user']['id'] in self.users:
-            print('authentic tweet')
+        if str(tweet['user']['id']) in self.users:
+            # print('authentic tweet')
             link = f"http://twitter.com/{tweet['user']['screen_name']}/status/{tweet['id']}"
             r.set(f"link:{tweet['id']}", link)
         else:
@@ -58,7 +58,7 @@ class RestockStreamListener(tweepy.StreamListener):
         return False
     
 def twitter_update():
-    print('starting stream')
+    # print('starting stream')
     while True:
         try:
             _twitter_update()
