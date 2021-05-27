@@ -38,18 +38,10 @@ class RestockStreamListener(tweepy.StreamListener):
 
     def on_data(self, data):
         tweet = json.loads(data)
-
-        if str(tweet['user']['id']) in self.users:
-            # print('authentic tweet')
-            link = f"http://twitter.com/{tweet['user']['screen_name']}/status/{tweet['id']}"
-            r.set(f"link:{tweet['id']}", link)
-        else:
-            unAuthTweetCount = r.get('unAuthTweetCount')
-            if unAuthTweetCount:
-                unAuthTweetCount = int(unAuthTweetCount) + 1
-                r.set('unAuthTweetCount', unAuthTweetCount)
-            else:
-                r.set('unAuthTweetCount', 1)
+        
+        # print('authentic tweet')
+        link = f"http://twitter.com/{tweet['user']['screen_name']}/status/{tweet['id']}"
+        r.set(f"link:{tweet['id']}", link)
 
         # print(tweet)
 
