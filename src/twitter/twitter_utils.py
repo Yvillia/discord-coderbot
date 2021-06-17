@@ -44,10 +44,18 @@ class RestockStreamListener(tweepy.StreamListener):
             link = f"http://twitter.com/{tweet['user']['screen_name']}/status/{tweet['id']}"
             r.set(f"link:{tweet['id']}", link)
 
-            authCount = r.get('authCount', 0)
+            authCount = r.get('authCount')
+
+            if authCount is None: 
+                authCount = 0
+
             r.set('authCount', authCount + 1)
         else:
             unAuthCount = r.get('unAuthCount', 0)
+
+            if unAuthCount is None:
+                unAuthCount = 0
+            
             r.set('unAuthCount', unAuthCount + 1)
 
     def on_error(self, status_code):
