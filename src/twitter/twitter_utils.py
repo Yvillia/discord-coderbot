@@ -51,7 +51,7 @@ class RestockStreamListener(tweepy.StreamListener):
 
             r.set('authCount', authCount + 1)
         else:
-            unAuthCount = r.get('unAuthCount', 0)
+            unAuthCount = r.get('unAuthCount')
 
             if unAuthCount is None:
                 unAuthCount = 0
@@ -76,11 +76,12 @@ def twitter_update():
 
 def _twitter_update():
     users = [str(i) for i in api.friends_ids('coderbott')]
+    tracking = ['ps5 restock', 'ps5 disc', 'ps5 digital', '[DROP]', 'ps5 bundle', 'xbox bundle']
     print(users)
     stream = tweepy.Stream(auth = api.auth, listener=RestockStreamListener(users=users))
     while True:
         try: 
-            stream.filter(track = ['ps5 restock', 'ps5 disc', 'ps5 digital', '[DROP]', 'ps5 bundle', 'xbox bundle'], follow=users, filter_level="low")
+            stream.filter( follow=users, filter_level="low")
         except (ProtocolError, ArithmeticError):
             continue
         except KeyboardInterrupt:
