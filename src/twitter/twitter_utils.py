@@ -39,11 +39,16 @@ class RestockStreamListener(tweepy.StreamListener):
     def on_data(self, data):
         tweet = json.loads(data)
         
-        # print('authentic tweet')
-        link = f"http://twitter.com/{tweet['user']['screen_name']}/status/{tweet['id']}"
-        r.set(f"link:{tweet['id']}", link)
+        if tweet['user']['id_str'] in self.users:
+            print('authentic tweet')
+            link = f"http://twitter.com/{tweet['user']['screen_name']}/status/{tweet['id']}"
+            r.set(f"link:{tweet['id']}", link)
 
-        # print(tweet)
+            authCount = r.get('authCount', 0)
+            r.set('authCount', authCount + 1)
+        else:
+            unAuthCount = r.get('unAuthCount', 0)
+            r.set('unAuthCount', unAuthCount + 1)
 
     def on_error(self, status_code):
         print(f'ERROR. Status Code: {status_code}')
@@ -67,7 +72,7 @@ def _twitter_update():
     stream = tweepy.Stream(auth = api.auth, listener=RestockStreamListener(users=users))
     while True:
         try: 
-            stream.filter(track = ['ps5 restock', 'ps5 disc', 'ps5 digital', '[DROP]', 'ps5 bundle', 'xbox bundle'], follow=users, filter_level="medium")
+            stream.filter(track = ['ps5 restock', 'ps5 disc', 'ps5 digital', '[DROP]', 'ps5 bundle', 'xbox bundle'], follow=users, filter_level="low")
         except (ProtocolError, ArithmeticError):
             continue
         except KeyboardInterrupt:
