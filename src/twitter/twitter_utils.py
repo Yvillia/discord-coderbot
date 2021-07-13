@@ -76,12 +76,13 @@ def twitter_update():
 
 def _twitter_update():
     users = [str(i) for i in api.friends_ids('coderbott')]
-    tracking = ['ps5 restock', 'ps5 disc', 'ps5 digital', '[DROP]', 'ps5 bundle', 'xbox bundle']
+    # tracking = ['ps5 restock', 'ps5 disc', 'ps5 digital', '[DROP]', 'ps5 bundle', 'xbox bundle']
     print(users)
     stream = tweepy.Stream(auth = api.auth, listener=RestockStreamListener(users=users))
     while True:
         try: 
-            stream.filter( follow=users, filter_level="low")
+            # stream.filter( follow=users, filter_level="low")
+            stream.filter( follow=users)
         except (ProtocolError, ArithmeticError):
             continue
         except KeyboardInterrupt:
