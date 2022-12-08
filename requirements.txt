@@ -6,7 +6,7 @@ atomicwrites==1.4.0
 attrs==20.3.0
 beautifulsoup4==4.9.3
 black==20.8b1
-certifi==2020.12.5
+certifi==2022.12.7
 cfgv==3.2.0
 chardet==3.0.4
 click==7.1.2
