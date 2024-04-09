@@ -21,7 +21,6 @@ from sympy.plotting.plot import Plot as symPlot
 def schedule_thread(myBot):
     while True:
         myBot.reportStatus()
-    return
 
 
 def check_multiples(msg):
@@ -58,11 +57,11 @@ def extract_names(name):
 
     """
     if type(name) != "string":
-        username = str(name)
-    username = username.split("#", 1)
-    user = username[0]
-    id = username[1]
-    return user, id
+        try:
+            username = name.name
+        except:
+            username = str(name)
+    return username
 
 
 async def coin_flip(myBot, message):
@@ -149,7 +148,7 @@ async def roll_dice(myBot, message):
 async def ban(message):
     if (
         len(message.mentions) == 1
-        and "coderbot" == extract_names(message.mentions[0])[0].lower()
+        and "coderbot" == extract_names(message.mentions[0]).lower()
     ):
         if not message.author.top_role.name.lower() == "snail queen":
             await message.channel.send(
@@ -181,7 +180,7 @@ async def ban(message):
         if type(message.guild.get_member(member.id)) is not None:
             await message.channel.send(
                 "OOPSIE WOOPSIE!! Uwu Did Someone make a fucky wucky!?! A wittle fucko boingo!? Better be more Cawreful! Enjoy the Nickname for a little while Ye Ol' Tart {0} ;3!".format(
-                    extract_names(member)[0]
+                    extract_names(member)
                 )
             )
             if message.guild.get_member(member.id) is not None:
@@ -204,13 +203,13 @@ async def ban(message):
     else:
         editedStr = ""
         for i, user in enumerate(message.mentions):
-            if extract_names(user)[0].lower() == "coderbot":
+            if extract_names(user).lower() == "coderbot":
                 continue
 
             if i != (len(message.mentions) - 1):
-                editedStr += str(extract_names(user)[0]) + ", "
+                editedStr += str(extract_names(user)) + ", "
             else:
-                editedStr += "or " + str(extract_names(user)[0])
+                editedStr += "or " + str(extract_names(user))
 
         await message.channel.send(
             "```Sigh... Okay, guess it's time to drop the ban-hammer. Whose wants this big ol' hammer first :3? {0}, UwU <3<3<3<3 ;3;3;3;3 ????```".format(
@@ -219,7 +218,7 @@ async def ban(message):
         )
 
         for member in message.mentions:
-            if extract_names(member)[0].lower() == "coderbot":
+            if extract_names(member).lower() == "coderbot":
                 continue
 
             if (
@@ -239,7 +238,7 @@ async def ban(message):
 async def pogchamp(message):
     if (
         len(message.mentions) == 1
-        and "coderbot" == extract_names(message.mentions[0])[0].lower()
+        and "coderbot" == extract_names(message.mentions[0]).lower()
     ):
         output = (
             "... Umm, sure I guess I can be my own little Pogchamp, you bully! :sob:"
@@ -247,19 +246,19 @@ async def pogchamp(message):
 
     elif len(message.mentions) == 1:
         output = '```System.out.println("Sigh... Okay, I guess you can be my little Pogchamp. {0}, Come here")```'.format(
-            extract_names(message.mentions[0])[0]
+            extract_names(message.mentions[0])
         )
 
     else:
         editedStr = ""
         for i, user in enumerate(message.mentions):
-            if extract_names(user)[0].lower() == "coderbot":
+            if extract_names(user).lower() == "coderbot":
                 continue
 
             if i != (len(message.mentions) - 1):
-                editedStr += str(extract_names(user)[0]) + ", "
+                editedStr += str(extract_names(user)) + ", "
             else:
-                editedStr += "and " + str(extract_names(user)[0])
+                editedStr += "and " + str(extract_names(user))
         output = '```System.out.println("Sigh... Okay, I guess you can be my little Pogchamps. {0}, Come here")```'.format(
             editedStr
         )
@@ -353,6 +352,11 @@ async def dialogue_handler(myBot, message):
         elif "good bot" in message.content.lower():
             await good_bot(True, message)
             return
+        
+        # Petty
+        if "don't ever say that to my friend again." in message.content.lower():
+            await message.channel.send("<@87620915126370304> you look so stupid rn")
+            return
 
         # Magic 8ball.
         if "!8ball" in message.content.lower():
@@ -371,7 +375,7 @@ async def dialogue_handler(myBot, message):
         if "!ban" in message.content.lower() and len(message.mentions) == 0:
             await message.channel.send(
                 "Umumu, I see you have chosen... Banishment "
-                + extract_names(message.author)[0]
+                + extract_names(message.author)
                 + "!! Bai Bai!"
             )
             await asyncio.sleep(5)
@@ -402,12 +406,12 @@ async def dialogue_handler(myBot, message):
                 if (
                     "!pogchamp" not in message.content.lower()
                     and "!ban" not in message.content.lower()
-                    and extract_names(message.author)[0].lower()
-                    == extract_names(name)[0].lower()
+                    and extract_names(message.author).lower()
+                    == extract_names(name).lower()
                 ):
                     msg = '```System.out.println("Sigh... Okay, I guess you can be my little Pogchamp. {0}, Come here")```'
                     await message.channel.send(
-                        msg.format(extract_names(message.author)[0])
+                        msg.format(extract_names(message.author))
                     )
                     return
 
@@ -467,13 +471,13 @@ async def sleeping_protocol(myBot, message):
             "ohayo" in message.content.lower()
             or (
                 len(message.mentions) > 0
-                and extract_names(message.mentions[0])[0].lower()
+                and extract_names(message.mentions[0]).lower()
             )
             == "coderbot"
         ):
             await myBot.awaken()
             await message.channel.send("Good Morning Everyone! :heart:")
-            return
+            return "Awake"
 
         elif not myBot.asleep and (
             "oyasumi" in message.content.lower()
@@ -489,14 +493,13 @@ async def sleeping_protocol(myBot, message):
                 "Like totally nighty-nighters everyone! :kissing_heart:"
             )
             await myBot.oyasumi()
-            return
+            return "Asleep"
 
         else:
             return
 
     except Exception as inst:
         return await fuckup(inst, message)
-    return 1
 
 
 async def good_bot(isGood, message):
@@ -705,6 +708,7 @@ async def fuckup(inst, message):
         + "\nLine: "
         + str(exc_tb.tb_lineno)
     )
+    print("Fuckup Occurred:", errorMsg)
     await message.channel.send("```" + errorMsg + "```")
     return 0
 

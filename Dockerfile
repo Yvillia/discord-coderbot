@@ -1,10 +1,12 @@
 FROM  python:3
 
-WORKDIR /./
+WORKDIR .
 
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install -r requirements.txt
 
 COPY . .
+RUN rm .env
+WORKDIR src
 
-CMD ["cd src", "python3 coderbot.py"]
+CMD ["python3", "coderbot.py"]

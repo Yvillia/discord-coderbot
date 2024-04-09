@@ -15,6 +15,8 @@ from redditAPI import redditAPI
 
 intents = discord.Intents.default()
 intents.members = True
+intents.message_content = True
+intents.presences = True
 
 # List of Discord IDs for Bot Channels
 # #Real Channels, uncomment this before merging
@@ -80,17 +82,17 @@ myBot = Bot(client, ID)
 # task_manager = commands.Bot(command_prefix="!", intents=intents)
 
 
-@tasks.loop(hours=24.0)
-async def post_saved():
+# @tasks.loop(hours=24.0)
+# async def post_saved():
     # print("here")
     # for saved_post in redd_inst.me.saved(limit=None):
     #   print(saved_post)
     # redd_inst.reddit.submission(id=saved_post.id).unsave()
-    for subreddit in subreddit_list:
-        curr_channel = myBot.channels[str(subreddit.display_name).lower()]
-        await curr_channel.send(datetime.now())
-        for hot_post in subreddit.hot(limit=1):
-            await curr_channel.send(hot_post.url)
+    # for subreddit in subreddit_list:
+    #     curr_channel = myBot.channels[str(subreddit.display_name).lower()]
+    #     await curr_channel.send(datetime.now())
+    #     for hot_post in subreddit.hot(limit=1):
+    #         await curr_channel.send(hot_post.url)
 
 
 @tasks.loop(hours=0.5)
@@ -159,6 +161,7 @@ async def on_ready():
             + "\nLine: "
             + str(exc_tb.tb_lineno)
         )
+        print("Error in Startup - " + errorMsg)
         await myBot.channels["bottest"].send("```" + errorMsg + "```")
 
 
@@ -175,6 +178,11 @@ async def on_message(message):
         #       await client.logout()
 
         pack = (myBot, message)
+        try: 
+            print("INFO - Message Sent By", message.author.name, ". Content is:", message.clean_content)
+        except:
+            print("ERROR - Message Sent By Unknown with Content: " , message.clean_content)
+            
         # Allow Only Sleeping Protocols While Bot is Asleep
         if myBot.asleep:
             result = [await f.sleeping_protocol(*pack)]
@@ -200,7 +208,8 @@ async def on_message(message):
 
         # Indicates which Functions May Have Had Errors
         if 0 in result:
-            raise Exception("Something went wrong: " + str(result))
+            print("Error in Message Protocols but No Exceptions (Sleep State, Coin_Flip, Roll_Dice, Dialogue_Handler, Reaction_Handler):", str(result))
+            raise Exception("Something went wrong (Sleep State, Coin_Flip, Roll_Dice, Dialogue_Handler, Reaction_Handler): " + str(result))
 
     except Exception as inst:
         exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -212,6 +221,7 @@ async def on_message(message):
             + "\nLine: "
             + str(exc_tb.tb_lineno)
         )
+        print(errorMsg)
         await message.channel.send("```" + errorMsg + "```")
 
 
@@ -239,13 +249,13 @@ async def on_error(event, *args, **kwargs):
 @client.event
 async def on_message_delete(message):
     # Store Messages in Archive So Everyone Can Have Message Privileges
-    if str(message.author).lower() == "coderbot":
+    if message.author == client.user:
         return
 
     # Store Deleted Messages in Archive So Everyone Can Have Message Privileges
     await myBot.channels["archive"].send(
         "==================\nMessage Type: Deletion\nAuthor: "
-        + str(f.extract_names(message.author)[0])
+        + str(f.extract_names(message.author))
         + "\nContent: "
         + str(message.content)
         + "\n=================="
@@ -255,13 +265,13 @@ async def on_message_delete(message):
 
 @client.event
 async def on_message_edit(before, after):
-    if str(before.author).lower() == "coderbot":
+    if before.author == client.user:
         return
 
     # Store Messages in Archive So Everyone Can Have Message Privileges
     await myBot.channels["archive"].send(
         "==================\nMessage Type: Edit\nAuthor: "
-        + str(f.extract_names(before.author)[0])
+        + str(f.extract_names(before.author))
         + "\nContent (Before): "
         + str(before.content)
         + "\nContent (After): "
